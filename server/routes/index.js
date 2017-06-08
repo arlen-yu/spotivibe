@@ -6,6 +6,32 @@ router.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../../client/index.html'));
 });
 
+// Fetch artist data by name
+router.get('/artist/id/:artistName', function (req, res) {
+  if (req.params.artistName !== 'bundle.js') {
+    authorize()
+      .then(function (token) {
+        spotifyApi.setAccessToken(token);
+        return getArtistIdByName(req.params.artistName)
+      })
+      .then(function (response) {
+        res.json({"data": response});
+      })
+  }
+})
+
+router.get('/albums/:artistId', function (req, res) {
+  if (req.params.artistId !== 'bundle.js') {
+    getArtistAlbumsById(req.params.artistId)
+      .then(function (response) {
+        res.json({albumInfo: response})
+      })
+  }
+})
+
+router.get('')
+
+// Route for fetching albums by artist name
 router.get('/visualize/albums/:artistName', function (req, res) {
   console.log(req.params)
   authorize();
@@ -19,7 +45,6 @@ router.get('/visualize/albums/:artistName', function (req, res) {
         res.json({"albums": null})
       })
   }
-  // res.sendFile(path.join(__dirname, '../../client/index.html'));
 })
 
 router.get('/visualize/feature/:albumName', function (req, res) {
@@ -56,7 +81,16 @@ function authorize () {
 function getArtistIdByName(name) {
   return spotifyApi.searchArtists(name)
     .then(function(data) {
-      return data.body.artists.items[0].id
+      let artist = data.body.artists.items[0]
+      if (artist) {
+        return {
+          id: artist.id,
+          img: artist.images[0].url,
+          name: artist.name,
+        }
+      } else {
+        return false;
+      }
     });
 }
 
@@ -64,7 +98,8 @@ function getArtistIdByName(name) {
 function getArtistAlbumsById(artistId) {
   return spotifyApi.getArtistAlbums(artistId, {limit: 50, album_type: 'album', market: 'US'})
     .then(function(data) {
-      data = data.body.items.map(function (a) {return a.id});
+      console.log(data.body.items[0])
+      data = data.body.items.map(function (a) {return {id: a.id, name: a.name}});
       return data;
     })
 }
@@ -98,7 +133,7 @@ function getAllAlbums (artistName) {
     })
     .then(function (response) {
       console.log('getting albums by id...')
-      return getArtistAlbumsById(response)
+      return getArtistAlbumsById(response.id)
     })
 }
 function getAlbumData (albumId) {

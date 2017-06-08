@@ -8,7 +8,9 @@ class VisualizeContainer extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      albumIds: [],
+      officialName: '',
+      artistImg: '',
+      albumInfo: [],
       data: [],
       error: false,
       ready: false //should be false to start
@@ -19,7 +21,7 @@ class VisualizeContainer extends Component {
   resetState () {
     this.setState(
       {
-        albumIds: [],
+        albumInfo: [],
         data: [],
         error: false,
         ready: false
@@ -28,29 +30,41 @@ class VisualizeContainer extends Component {
   }
 
   fetchData (artistName) {
-    console.log('this should be empty: ' + this.state.data)
-    console.log('fetching data from ' + artistName)
-    fetch('/visualize/albums/' + artistName)
+    fetch('/artist/id/' + artistName)
       .then(res => res.json())
       .then(function (res) {
-        if (res.albums !== null) {
-          this.setState({albumIds: res.albums});
-          return res.albums;
+        if (res.data) {
+          this.setState({
+            officialName: res.data.name,
+            artistImg: res.data.img
+          });
+          return res.data.id;
         } else {
-          console.log('false!')
           this.setState({error: true});
           return false;
         }
       }.bind(this))
-      .then(function (albumIds) {
-        if (albumIds) {
-          albumIds.map(function (id) {
-            fetch('/visualize/feature/' + id)
+      .then(function (artistId) {
+        return fetch('/albums/' + artistId)
+      })
+      .then(res => res.json())
+      .then(function (res) {
+        if (res.albumInfo) {
+          this.setState({albumInfo: res.albumInfo});
+          return res.albumInfo;
+        } else {
+          return false;
+        }
+      }.bind(this))
+      .then(function (albumInfo) {
+        if (albumInfo) {
+          albumInfo.map(function (album) {
+            fetch('/visualize/feature/' + album.id)
               .then(res => res.json())
               .then(function (featureData) {
-                let newData = this.state.data
-                newData.push({albumId: id, data: featureData})
-                this.setState({data: newData})
+                let newData = this.state.data;
+                newData.push({albumName: album.name, data: featureData});
+                this.setState({data: newData});
               }.bind(this))
           }.bind(this))
         }
@@ -74,7 +88,7 @@ class VisualizeContainer extends Component {
       <div>
         <Homepage artistName={this.props.match.params.artistName} />
         {!this.state.error
-          ? <Visualize name={this.props.match.params.artistName} data={this.state.data} />
+          ? <Visualize name={this.state.officialName} img={this.state.artistImg} data={this.state.data} />
           : <p>ERROR</p>}
       </div>
 

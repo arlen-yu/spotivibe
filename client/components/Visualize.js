@@ -7,12 +7,12 @@ class Visualize extends Component {
   render () {
     return (
       <div>
-        <ArtistCard name={this.props.name} />
+        <ArtistCard name={this.props.name} img={this.props.img}/>
         <div style={{display: 'inline'}}>
           {this.props.data.map(function (el, i) {
             return (
               <div style={{width: '30%', display: 'block', float: 'left'}}>
-                <h2>{el.albumId}</h2>
+                <h2>{el.albumName}</h2>
                 <Graph data={el.data.data} />
               </div>
           )

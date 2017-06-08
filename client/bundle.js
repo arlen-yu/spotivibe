@@ -33450,6 +33450,7 @@ var ArtistCard = function (_Component) {
   _createClass(ArtistCard, [{
     key: 'render',
     value: function render() {
+      console.log('image ' + this.props.img);
       return _react2.default.createElement(
         'div',
         null,
@@ -33457,7 +33458,8 @@ var ArtistCard = function (_Component) {
           'h1',
           null,
           this.props.name
-        )
+        ),
+        _react2.default.createElement('img', { src: this.props.img })
       );
     }
   }]);
@@ -33466,7 +33468,8 @@ var ArtistCard = function (_Component) {
 }(_react.Component);
 
 ArtistCard.propTypes = {
-  name: _propTypes2.default.string.isRequired
+  name: _propTypes2.default.string.isRequired,
+  img: _propTypes2.default.string
 };
 
 exports.default = ArtistCard;
@@ -33714,7 +33717,7 @@ var Visualize = function (_Component) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_ArtistCard2.default, { name: this.props.name }),
+        _react2.default.createElement(_ArtistCard2.default, { name: this.props.name, img: this.props.img }),
         _react2.default.createElement(
           'div',
           { style: { display: 'inline' } },
@@ -33725,7 +33728,7 @@ var Visualize = function (_Component) {
               _react2.default.createElement(
                 'h2',
                 null,
-                el.albumId
+                el.albumName
               ),
               _react2.default.createElement(_Graph2.default, { data: el.data.data })
             );
@@ -33796,7 +33799,9 @@ var VisualizeContainer = function (_Component) {
     var _this = _possibleConstructorReturn(this, (VisualizeContainer.__proto__ || Object.getPrototypeOf(VisualizeContainer)).call(this, props));
 
     _this.state = {
-      albumIds: [],
+      officialName: '',
+      artistImg: '',
+      albumInfo: [],
       data: [],
       error: false,
       ready: false //should be false to start
@@ -33809,7 +33814,7 @@ var VisualizeContainer = function (_Component) {
     key: 'resetState',
     value: function resetState() {
       this.setState({
-        albumIds: [],
+        albumInfo: [],
         data: [],
         error: false,
         ready: false
@@ -33818,27 +33823,38 @@ var VisualizeContainer = function (_Component) {
   }, {
     key: 'fetchData',
     value: function fetchData(artistName) {
-      console.log('this should be empty: ' + this.state.data);
-      console.log('fetching data from ' + artistName);
-      fetch('/visualize/albums/' + artistName).then(function (res) {
+      fetch('/artist/id/' + artistName).then(function (res) {
         return res.json();
       }).then(function (res) {
-        if (res.albums !== null) {
-          this.setState({ albumIds: res.albums });
-          return res.albums;
+        if (res.data) {
+          this.setState({
+            officialName: res.data.name,
+            artistImg: res.data.img
+          });
+          return res.data.id;
         } else {
-          console.log('false!');
           this.setState({ error: true });
           return false;
         }
-      }.bind(this)).then(function (albumIds) {
-        if (albumIds) {
-          albumIds.map(function (id) {
-            fetch('/visualize/feature/' + id).then(function (res) {
+      }.bind(this)).then(function (artistId) {
+        return fetch('/albums/' + artistId);
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (res.albumInfo) {
+          this.setState({ albumInfo: res.albumInfo });
+          return res.albumInfo;
+        } else {
+          return false;
+        }
+      }.bind(this)).then(function (albumInfo) {
+        if (albumInfo) {
+          albumInfo.map(function (album) {
+            fetch('/visualize/feature/' + album.id).then(function (res) {
               return res.json();
             }).then(function (featureData) {
               var newData = this.state.data;
-              newData.push({ albumId: id, data: featureData });
+              newData.push({ albumName: album.name, data: featureData });
               this.setState({ data: newData });
             }.bind(this));
           }.bind(this));
@@ -33866,7 +33882,7 @@ var VisualizeContainer = function (_Component) {
         'div',
         null,
         _react2.default.createElement(_Homepage2.default, { artistName: this.props.match.params.artistName }),
-        !this.state.error ? _react2.default.createElement(_Visualize2.default, { name: this.props.match.params.artistName, data: this.state.data }) : _react2.default.createElement(
+        !this.state.error ? _react2.default.createElement(_Visualize2.default, { name: this.state.officialName, img: this.state.artistImg, data: this.state.data }) : _react2.default.createElement(
           'p',
           null,
           'ERROR'
