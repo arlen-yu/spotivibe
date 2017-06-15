@@ -2,7 +2,7 @@ import { ScatterChart, XAxis, YAxis, CartesianGrid, Scatter, Tooltip } from 'rec
 import React, { Component } from 'react';
 
 class Graph extends Component {
-  render () {    
+  render () {
     return (
       <ScatterChart width={300} height={300}
         margin={{ top: 20, right: 20, bottom: 10, left: 10 }}>

@@ -15,7 +15,11 @@ router.get('/artist/id/:artistName', function (req, res) {
         return getArtistIdByName(req.params.artistName)
       })
       .then(function (response) {
-        res.json({"data": response});
+        if (response) {
+          res.json({"data": response});
+        } else {
+          res.json({"data": null})
+        }
       })
   }
 })
@@ -25,24 +29,6 @@ router.get('/albums/:artistId', function (req, res) {
     getArtistAlbumsById(req.params.artistId)
       .then(function (response) {
         res.json({albumInfo: response})
-      })
-  }
-})
-
-router.get('')
-
-// Route for fetching albums by artist name
-router.get('/visualize/albums/:artistName', function (req, res) {
-  console.log(req.params)
-  authorize();
-  if (req.params.artistName !== 'bundle.js') {
-    console.log('getting albums...')
-    getAllAlbums(req.params.artistName)
-      .then(function (response) {
-        res.json({"albums": response});
-      }, function (error) {
-        console.log('ERROR ' + error)
-        res.json({"albums": null})
       })
   }
 })
@@ -98,8 +84,21 @@ function getArtistIdByName(name) {
 function getArtistAlbumsById(artistId) {
   return spotifyApi.getArtistAlbums(artistId, {limit: 50, album_type: 'album', market: 'US'})
     .then(function(data) {
-      console.log(data.body.items[0])
-      data = data.body.items.map(function (a) {return {id: a.id, name: a.name}});
+      let visited = [];
+
+      data = data.body.items.map(function (album) {
+        let generalName = album.name.replace(/ *\([^)]*\) */g, '');
+        if (isInArray(generalName, visited)) {
+          return false
+        } else {
+          visited.push(generalName);
+          return {
+            id: album.id, name: album.name
+          }
+        }});
+      data = data.filter(function (album) {
+        return album;
+      })
       return data;
     })
 }
@@ -144,4 +143,8 @@ function getAlbumData (albumId) {
     .then(function (features) {
       return features.audio_features;
     })
+}
+
+function isInArray(value, array) {
+  return array.indexOf(value) > -1;
 }

@@ -7,7 +7,7 @@ class ArtistCard extends Component {
     return (
       <div>
         <h1>{this.props.name}</h1>
-        <img src={this.props.img} />
+        <img src={this.props.img} style={{width: '50px'}}/>
       </div>
     )
   }
