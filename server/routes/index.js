@@ -36,7 +36,6 @@ router.get('/albums/:artistId', function (req, res) {
 router.get('/visualize/feature/:albumName', function (req, res) {
   authorize();
   if (req.params.albumName !== 'bundle.js') {
-    console.log('getting features...')
     getAlbumData(req.params.albumName)
       .then(function (response) {
         res.json({'data': response})
@@ -106,17 +105,36 @@ function getArtistAlbumsById(artistId) {
 function getAlbumTracks (albumId) {
   return spotifyApi.getAlbumTracks(albumId, { limit : 50})
     .then(function(data) {
-      let trackInfo = data.body.items.map(function (a) {return a.id});
+      let trackInfo = data.body.items.map(function (a) {
+        let temp = {
+          id: a.id,
+          name: a.name
+        }
+        return temp;
+    });
       return trackInfo;
     }, function(err) {
       console.log('Something went wrong!', err);
     });
 }
 
-function getAudioFeatures(trackIds) {
+function getAudioFeatures(trackInfo) {
+  let trackIds = trackInfo.map(function (track) {
+    return track.id
+  })
   return spotifyApi.getAudioFeaturesForTracks(trackIds)
     .then(function(data) {
-      return data.body
+      return data.body.audio_features.map(function (track) {
+        for (let i = 0; i < trackInfo.length; i++) {
+          if (track.id === trackInfo[i].id) {
+            console.log('trackid found!')
+            track['name'] = trackInfo[i].name;
+            console.log(track)
+            return track;
+          }
+        }
+        return track;
+      })
     }, function(err) {
       console.log(err)
     });
@@ -125,13 +143,10 @@ function getAudioFeatures(trackIds) {
 function getAllAlbums (artistName) {
   return authorize()
     .then(function (token) {
-      console.log('ye')
       spotifyApi.setAccessToken(token);
-      console.log('getting artist id by name...')
       return getArtistIdByName(artistName)
     })
     .then(function (response) {
-      console.log('getting albums by id...')
       return getArtistAlbumsById(response.id)
     })
 }
@@ -141,7 +156,7 @@ function getAlbumData (albumId) {
       return getAudioFeatures(response)
     })
     .then(function (features) {
-      return features.audio_features;
+      return features;
     })
 }
 

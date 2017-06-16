@@ -35285,8 +35285,55 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Graph = function (_Component) {
-  _inherits(Graph, _Component);
+var CustomTooltip = function (_Component) {
+  _inherits(CustomTooltip, _Component);
+
+  function CustomTooltip() {
+    _classCallCheck(this, CustomTooltip);
+
+    return _possibleConstructorReturn(this, (CustomTooltip.__proto__ || Object.getPrototypeOf(CustomTooltip)).apply(this, arguments));
+  }
+
+  _createClass(CustomTooltip, [{
+    key: 'render',
+    value: function render() {
+      if (this.props && this.props.payload.length !== 0) {
+        console.log(this.props.payload);
+        var payload = this.props.payload[0].payload;
+        return _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'p',
+            null,
+            'name: ' + payload.name
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            'danceability: ' + this.props.payload[0].value
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            'energy: ' + this.props.payload[1].value
+          )
+        );
+      } else {
+        return _react2.default.createElement(
+          'div',
+          null,
+          'shit'
+        );
+      }
+    }
+  }]);
+
+  return CustomTooltip;
+}(_react.Component);
+
+var Graph = function (_Component2) {
+  _inherits(Graph, _Component2);
 
   function Graph() {
     _classCallCheck(this, Graph);
@@ -35297,13 +35344,16 @@ var Graph = function (_Component) {
   _createClass(Graph, [{
     key: 'render',
     value: function render() {
+      console.log(this.props.data);
       return _react2.default.createElement(
         _recharts.ScatterChart,
-        { width: 300, height: 300,
+        {
+          width: this.props.width || 300,
+          height: this.props.height || 300,
           margin: { top: 20, right: 20, bottom: 10, left: 10 } },
         _react2.default.createElement(_recharts.XAxis, { type: 'number', dataKey: 'danceability', name: 'danceability' }),
         _react2.default.createElement(_recharts.YAxis, { type: 'number', dataKey: 'energy', name: 'energy' }),
-        _react2.default.createElement(_recharts.Tooltip, { cursor: { strokeDasharray: '3 3' } }),
+        _react2.default.createElement(_recharts.Tooltip, { content: _react2.default.createElement(CustomTooltip, null), label: 'name', payload: this.props.data }),
         _react2.default.createElement(_recharts.CartesianGrid, { strokeDasharray: '3 3' }),
         _react2.default.createElement(_recharts.Scatter, { name: 'temp', data: this.props.data, fill: '#82ca9d' })
       );
@@ -35312,6 +35362,12 @@ var Graph = function (_Component) {
 
   return Graph;
 }(_react.Component);
+
+Graph.propTypes = {
+  width: _react.PropTypes.number,
+  height: _react.PropTypes.number,
+  data: _react.PropTypes.array
+};
 
 exports.default = Graph;
 
@@ -35525,7 +35581,7 @@ var Visualize = function (_Component) {
         allSongData = [].concat(_toConsumableArray(allSongData), _toConsumableArray(el.data.data));
       });
       console.log(this.state.allSongData);
-      return _react2.default.createElement(_Graph2.default, { data: allSongData });
+      return _react2.default.createElement(_Graph2.default, { data: allSongData, width: 800, height: 800 });
     }
   }, {
     key: 'renderAlbumGraphs',
@@ -35536,13 +35592,13 @@ var Visualize = function (_Component) {
         this.props.data.map(function (el, i) {
           return _react2.default.createElement(
             'div',
-            { style: { display: 'inline-block', width: '30%' } },
+            { style: { display: 'inline-block', width: '400', height: '400', float: 'left' } },
             _react2.default.createElement(
               'h1',
               null,
               el.albumName
             ),
-            _react2.default.createElement(_Graph2.default, { data: el.data.data })
+            _react2.default.createElement(_Graph2.default, { data: el.data.data, width: 300, height: 300 })
           );
         })
       );
@@ -35718,10 +35774,14 @@ var VisualizeContainer = function (_Component) {
         'div',
         null,
         _react2.default.createElement(_Homepage2.default, { artistName: this.props.match.params.artistName }),
-        !this.state.error ? _react2.default.createElement(_Visualize2.default, { name: this.state.officialName, img: this.state.artistImg, data: this.state.data }) : _react2.default.createElement(
-          'p',
-          null,
-          'ERROR'
+        _react2.default.createElement(
+          'div',
+          { style: { textAlign: 'center' } },
+          !this.state.error ? _react2.default.createElement(_Visualize2.default, { name: this.state.officialName, img: this.state.artistImg, data: this.state.data }) : _react2.default.createElement(
+            'p',
+            null,
+            'ERROR'
+          )
         )
       );
     }

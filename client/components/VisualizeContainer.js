@@ -87,9 +87,11 @@ class VisualizeContainer extends Component {
     return (
       <div>
         <Homepage artistName={this.props.match.params.artistName} />
-        {!this.state.error
-          ? <Visualize name={this.state.officialName} img={this.state.artistImg} data={this.state.data} />
-          : <p>ERROR</p>}
+        <div style={{textAlign: 'center'}}>
+          {!this.state.error
+            ? <Visualize name={this.state.officialName} img={this.state.artistImg} data={this.state.data} />
+            : <p>ERROR</p>}
+        </div>
       </div>
 
     )
