@@ -28,8 +28,7 @@ class Visualize extends Component {
     this.props.data.map(function (el, i) {
       allSongData = [...allSongData, ...el.data.data]
     })
-    console.log(this.state.allSongData)
-    return <Graph data={allSongData} width={800} height={800} />
+    return <Graph data={allSongData} width={800} height={800} onClick={this.props.onClick} />
   }
 
   renderAlbumGraphs () {
@@ -37,12 +36,14 @@ class Visualize extends Component {
       <div style={{display: 'inline-block'}}>
         {this.props.data.map(function (el, i) {
           return (
-            <div style={{display: 'inline-block', width: '400', height: '400', float: 'left'}}>
+            <div
+              style={{display: 'inline-block', width: '400px', height: '400px', float: 'left'}}
+              key={el.albumName}>
               <h1>{el.albumName}</h1>
-              <Graph data={el.data.data} width={300} height={300} />
+              <Graph data={el.data.data} width={300} height={300} onClick={this.props.onClick} />
             </div>
         )
-        })}
+      }.bind(this))}
       </div>
     )
   }

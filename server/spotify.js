@@ -1,8 +1,8 @@
 var SpotifyWebApi = require('spotify-web-api-node')
-
+var config = require('../config.json')
 var spotifyApi = new SpotifyWebApi({
-  clientId : '78e5d177b7c24940842391151cf7fa6b',
-  clientSecret : '40fecda83f8949c9a0683b44bed066d6'
+  clientId : config.clientId,
+  clientSecret : config.clientSecret
 })
 
 function authorize () {
