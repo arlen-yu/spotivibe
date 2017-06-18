@@ -2,23 +2,28 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class ArtistCard extends Component {
-  shouldComponentUpdate (nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     return this.props.name !== nextProps.name && this.props.img !== nextProps.img;
   }
 
-  render () {
+  render() {
     return (
       <div>
         <h1>{this.props.name}</h1>
-        <img src={this.props.img} style={{width: '50px'}}/>
+        <img alt="" src={this.props.img} style={{ width: '50px' }} />
       </div>
-    )
+    );
   }
 }
 
 ArtistCard.propTypes = {
-  name: PropTypes.string.isRequired,
-  img: PropTypes.string
-}
+  name: PropTypes.string,
+  img: PropTypes.string,
+};
+
+ArtistCard.defaultProps = {
+  name: '',
+  img: '',
+};
 
 export default ArtistCard;

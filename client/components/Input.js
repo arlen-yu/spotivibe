@@ -1,93 +1,82 @@
 import React, { Component } from 'react';
-import { TextField } from 'material-ui';
 import Autocomplete from 'react-autocomplete';
+import PropTypes from 'prop-types';
 
-var styles = {
+const styles = {
   item: {
     padding: '2px 6px',
-    cursor: 'default'
+    cursor: 'default',
   },
 
   highlightedItem: {
     color: 'white',
     background: 'hsl(200, 50%, 50%)',
     padding: '2px 6px',
-    cursor: 'default'
+    cursor: 'default',
   },
-
   menu: {
-    border: 'solid 1px #ccc'
-  }
+    border: 'solid 1px #ccc',
+  },
+};
+
+function renderItem(item, isHighlighted) {
+  return (
+    <div
+      style={isHighlighted ? styles.highlightedItem : styles.item}
+      key={item.id}
+      id={item.name}
+    >{item.name}</div>
+  );
 }
 
 class Input extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
       artistName: this.props.artistName || '',
-      dataSource: []
-    }
+      dataSource: [],
+    };
 
     this.handleUpdateInput = this.handleUpdateInput.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleUpdateInput(event) {
-    var value = event.target.value
-    this.setState({artistName: value})
-    fetch('/artist/id/' + value)
+    const value = event.target.value;
+    this.setState({ artistName: value });
+    fetch(`/artist/id/${value}`)
       .then(res => res.json())
-      .then(function (res) {
+      .then((res) => {
         this.setState({
-          dataSource: res.data
-        })
-      }.bind(this))
-		// this.setState(function() {
-		// 	return {
-		// 		artistName: value
-		// 	}
-		// })
-	}
+          dataSource: res.data,
+        });
+      });
+  }
 
-	handleSubmit(item) {
-		event.preventDefault();
-    // console.log(item)
-		this.props.onSubmit(item)
-	}
-
-  renderItem(item, isHighlighted) {
-    return (
-      <div
-        style={isHighlighted ? styles.highlightedItem : styles.item}
-        key={item.id}
-        id={item.name}
-      >{item.name}</div>
-    )
+  handleSubmit(item) {
+    this.props.onSubmit(item);
   }
 
   render() {
-    console.log('rendering Input!')
     return (
       <Autocomplete
-        getItemValue={(item) => {
-          return item.name
-        }}
+        getItemValue={item => item.name}
         onSelect={(value, item) => {
-         // set the menu to only the selected item
-        //  console.log(item)
-         this.handleSubmit(item)
-         // or you could reset it to a default list again
-         // this.setState({ unitedStates: getStates() })
-       }}
-        ref="autocomplete"
+          this.handleSubmit(item);
+        }}
         items={this.state.dataSource}
         value={this.state.artistName}
         onChange={this.handleUpdateInput}
-        renderItem={(item, isHighlighted) => this.renderItem(item, isHighlighted)}
+        renderItem={renderItem}
       />
     );
   }
 }
+
+Input.propTypes = {
+  artistName: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default Input;
