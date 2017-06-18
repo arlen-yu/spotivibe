@@ -1,20 +1,20 @@
 // PACKAGES //
-var path = require('path');
-var fs = require('fs');
-var express = require('express');
+const path = require('path');
+const fs = require('fs');
+const express = require('express');
 
 
 // IMPORTS //
-var indexRoutes = require('./routes/index');
+const indexRoutes = require('./routes/index');
 
 // CREATE APP //
-var app = express();
+const app = express();
 
 
 // VIEW ENGINE //
 app.set('view engine', 'html');
-app.engine('html', function (path, options, callbacks) {
-  fs.readFile(path, 'utf-8', callback);
+app.engine('html', (p, options, callbacks) => {
+  fs.readFile(p, 'utf-8', callbacks);
 });
 
 // MIDDLEWARE //
@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, '../client')));
 app.use('/', indexRoutes);
 
 // ERROR HANDLER //
-app.use(function (err, req, res, next) {
+app.use((err, req, res) => {
   res.status(err.status || 500);
 });
 

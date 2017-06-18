@@ -1,77 +1,57 @@
-var SpotifyWebApi = require('spotify-web-api-node')
-var config = require('../config.json')
-var spotifyApi = new SpotifyWebApi({
-  clientId : config.clientId,
-  clientSecret : config.clientSecret
-})
+const SpotifyWebApi = require('spotify-web-api-node');
 
-function authorize () {
+const config = require('../config.json');
+
+const spotifyApi = new SpotifyWebApi({
+  clientId: config.clientId,
+  clientSecret: config.clientSecret,
+});
+
+function authorize() {
   return spotifyApi.clientCredentialsGrant()
-    .then(function(data) {
-      console.log('authorized')
-      return data.body['access_token']
-    }, function(err) {
-      console.log('Something went wrong when retrieving an access token', err);
-    });
+    .then(data => data.body.access_token);
 }
 
 // TODO: Let user pick from a list of names
 function getArtistIdByName(name) {
   return spotifyApi.searchArtists(name)
-    .then(function(data) {
-      return data.body.artists.items[0].id
-    });
+    .then(data => data.body.artists.items[0].id);
 }
 
 // TODO: Do I still need to authorize??? Fix later...
 function getArtistAlbumsById(artistId) {
-  return spotifyApi.getArtistAlbums(artistId, {limit: 50, album_type: 'album', market: 'US'})
-    .then(function(data) {
-      data = data.body.items.map(function (a) {return a.id});
-      return data;
-    })
+  return spotifyApi.getArtistAlbums(artistId, { limit: 50, album_type: 'album', market: 'US' })
+    .then((data) => {
+      const dataNew = data.body.items.map(a => a.id);
+      return dataNew;
+    });
 }
 
-function getAlbumTracks (albumId) {
-  return spotifyApi.getAlbumTracks(albumId, { limit : 50})
-    .then(function(data) {
-      let trackInfo = data.body.items.map(function (a) {return a.id});
+function getAlbumTracks(albumId) {
+  return spotifyApi.getAlbumTracks(albumId, { limit: 50 })
+    .then((data) => {
+      const trackInfo = data.body.items.map(a => a.id);
       return trackInfo;
-    }, function(err) {
-      console.log('Something went wrong!', err);
     });
 }
 
 function getAudioFeatures(trackIds) {
   return spotifyApi.getAudioFeaturesForTracks(trackIds)
-    .then(function(data) {
-      return data.body
-    }, function(err) {
-      console.log(err)
-    });
+    .then(data => data.body);
 }
 
 module.exports = {
-  getAllAlbums: function (artistName) {
+  getAllAlbums(artistName) {
     return authorize()
-      .then(function (token) {
-        console.log('ye')
+      .then((token) => {
         spotifyApi.setAccessToken(token);
-        console.log('getting artist id by name...')
-        return getArtistIdByName(artistName)
+        return getArtistIdByName(artistName);
       })
-      .then(function (response) {
-        console.log('getting albums by id...')
-        return getArtistAlbumsById(response)
-      })
+      .then(response => getArtistAlbumsById(response));
   },
-  getAlbumData: function (albumId) {
+  getAlbumData(albumId) {
     return getAlbumTracks(albumId)
-      .then(function (response) {
-        return getAudioFeatures(response)
-      })
-      .then(function (features) {
-        return features.audio_features;
-      })
-  }
-}
+      .then(response => getAudioFeatures(response))
+      .then(features => features.audio_features);
+  },
+};
