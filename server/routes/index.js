@@ -66,6 +66,7 @@ function authorize () {
 function getArtistIdByName(name) {
   return spotifyApi.searchArtists(name)
     .then(function(data) {
+      return data.body.artists.items
       let artist = data.body.artists.items[0]
       if (artist) {
         return {

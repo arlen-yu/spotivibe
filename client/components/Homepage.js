@@ -7,7 +7,7 @@ class Homepage extends Component {
     super(props)
     this.state = {
       redirect: false,
-      artistName: ''
+      artistData: null
     }
     this.onSubmit = this.onSubmit.bind(this)
   }
@@ -18,17 +18,20 @@ class Homepage extends Component {
     }
   }
 
-  onSubmit (artistName) {
-    this.setState({redirect: true, artistName: artistName});
+  onSubmit (artistData) {
+    this.setState({redirect: true, artistData: artistData});
   }
 
   render () {
     if (this.state.redirect) {
-      return <Redirect to={'/visualize/' + this.state.artistName} />;
+      return <Redirect to={{
+        pathname:'/visualize/' + this.state.artistData.name,
+        state: {artistData: this.state.artistData}
+      }} />;
     }
 
     return (
-      <div style={{textAlign: 'center'}}>
+      <div>
         <h1>TEMPO</h1>
         <Input onSubmit={this.onSubmit} artistName={this.props.artistName || ''}/>
       </div>

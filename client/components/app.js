@@ -19,8 +19,8 @@ class App extends Component {
       <div style={style}>
         <MuiThemeProvider>
           <Switch>
-            <Route exact path='/' component={Homepage}/>
-            <Route path='/visualize/:artistName' component={VisualizeContainer}/>
+            <Route exact path='/' component={Homepage} />
+            <Route path='/visualize/:artistName' component={VisualizeContainer} />
           </Switch>
         </MuiThemeProvider>
       </div>

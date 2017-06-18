@@ -37,57 +37,49 @@ class VisualizeContainer extends Component {
     );
   }
 
-  fetchData (artistName) {
-    fetch('/artist/id/' + artistName)
-      .then(res => res.json())
-      .then(function (res) {
-        if (res.data) {
-          this.setState({
-            officialName: res.data.name,
-            artistImg: res.data.img
-          });
-          return res.data.id;
-        } else {
-          this.setState({error: true});
-          return false;
-        }
-      }.bind(this))
-      .then(function (artistId) {
-        return fetch('/albums/' + artistId)
+  fetchData (artistData) {
+    if (artistData) {
+      this.setState({
+        officialName: artistData.name,
+        artistImg: artistData.images[0].url
       })
-      .then(res => res.json())
-      .then(function (res) {
-        if (res.albumInfo) {
-          this.setState({albumInfo: res.albumInfo});
-          return res.albumInfo;
-        } else {
-          return false;
-        }
-      }.bind(this))
-      .then(function (albumInfo) {
-        if (albumInfo) {
-          albumInfo.map(function (album) {
-            fetch('/visualize/feature/' + album.id)
-              .then(res => res.json())
-              .then(function (featureData) {
-                let newData = this.state.data;
-                newData.push({albumName: album.name, data: featureData});
-                this.setState({data: newData});
-              }.bind(this))
-          }.bind(this))
-        }
-      }.bind(this))
+      fetch('/albums/' + artistData.id)
+        .then(res => res.json())
+        .then(function (res) {
+          if (res.albumInfo) {
+            this.setState({albumInfo: res.albumInfo});
+            return res.albumInfo;
+          } else {
+            return false;
+          }
+        }.bind(this))
+        .then(function (albumInfo) {
+          if (albumInfo) {
+            albumInfo.map(function (album) {
+              fetch('/visualize/feature/' + album.id)
+                .then(res => res.json())
+                .then(function (featureData) {
+                  let newData = this.state.data;
+                  newData.push({albumName: album.name, data: featureData});
+                  this.setState({data: newData});
+                }.bind(this))
+            }.bind(this))
+          }
+        }.bind(this))
+    } else {
+      this.setState({error: true});
+    }
   }
 
   componentDidMount () {
     // FETCH DATA FROM API...
-    this.fetchData(this.props.match.params.artistName);
+    this.fetchData(this.props.location.state.artistData);
   }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.match.params.artistName !== this.props.match.params.artistName) {
       this.resetState();
-      this.fetchData(nextProps.match.params.artistName);
+      this.fetchData(nextProps.location.state.artistData);
     }
   }
 
