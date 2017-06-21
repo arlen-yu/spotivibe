@@ -1,0 +1,59 @@
+html, body {
+  font-family: 'PT Sans';
+  margin: 0;
+  padding: 0;
+  height: 100vh,
+}
+
+* {
+  font-family: 'PT Sans';
+}
+
+body {
+  font-family: 'PT Sans';
+  background: #ffffff;
+  color: #4d4d4d;
+  margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -ms-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:global .inputWrapper {
+  -webkit-transition: all 2s ease;
+  -moz-transition: all 2s ease;
+  -o-transition: all 2s ease;
+  -ms-transition: all 2s ease;
+}
+
+:global .mainHeadingLanding .inputWrapper {
+  text-align: center;
+  margin-top: 0;
+}
+
+:global .mainHeading .inputWrapper {
+  text-align: center;
+  margin-top: 0;
+}
+
+:global .mainHeadingLanding .header {
+  text-align: center;
+  padding-top: 300;
+  margin-bottom: 20px;
+  font-size: 96px;
+  color: '#BC7381';
+}
+
+:global .mainHeading .header {
+  text-align: center;
+  padding-top: 50;
+  font-size: 56px;
+  margin-bottom: 20px;
+}
+
+@font-face {
+  font-family: 'PT Sans', sans-serif;
+  src: url('../assets/PT_Sans-Web-Regular.ttf')
+}

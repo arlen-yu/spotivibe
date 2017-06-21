@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui';
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import Visualize from './Visualize';
 import Homepage from './Homepage';
 
@@ -13,10 +15,12 @@ class VisualizeContainer extends Component {
       data: [],
       error: false,
       uri: '',
+      type: 'albums',
       ready: false, // should be false to start
     };
     this.fetchData = this.fetchData.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
@@ -35,11 +39,27 @@ class VisualizeContainer extends Component {
     this.setState({ uri });
   }
 
+  onChange(event, value) {
+    event.preventDefault();
+    this.setState({
+      type: value,
+    });
+  }
+
+  resetState() {
+    this.setState({
+      albumInfo: [],
+      data: [],
+      error: false,
+      ready: false,
+    });
+  }
+
   fetchData(artistData) {
     if (artistData) {
       this.setState({
         officialName: artistData.name,
-        artistImg: artistData.images[0].url,
+        artistImg: artistData.images.length > 0 ? artistData.images[0].url : '',
       });
       fetch(`/albums/${artistData.id}`)
         .then(res => res.json())
@@ -67,44 +87,53 @@ class VisualizeContainer extends Component {
     }
   }
 
-  resetState() {
-    this.setState({
-      albumInfo: [],
-      data: [],
-      error: false,
-      ready: false,
-    });
-  }
-
   render() {
-    const iframeStyle = {
-      position: 'fixed',
-      bottom: 50,
-      right: 50,
-    };
-
     return (
       <div style={{ position: 'relative' }}>
-        <Homepage artistName={this.props.match.params.artistName} />
-        <div style={{ textAlign: 'center' }}>
-          {!this.state.error
-            ? <Visualize
-              name={this.state.officialName}
-              img={this.state.artistImg}
-              data={this.state.data}
-              onClick={this.onClick}
-            />
-            : <p>ERROR</p>}
+        <div style={{ paddingBottom: '120' }}>
+          <Homepage artistName={this.props.match.params.artistName} landing={false} />
+          <div>
+            {!this.state.error
+              ? <Visualize
+                name={this.state.officialName}
+                img={this.state.artistImg}
+                data={this.state.data}
+                onClick={this.onClick}
+                type={this.state.type}
+              />
+              : <p>ERROR</p>}
+          </div>
         </div>
-        <iframe
-          title="spotify-widgit"
-          style={iframeStyle}
-          src={this.state.uri}
-          width="250"
-          height="80"
-          frameBorder="0"
-          allowTransparency="true"
-        />
+        <Toolbar style={{ position: 'fixed', bottom: 0, left: 0, height: 120, width: '100%' }}>
+          <ToolbarGroup>
+            <RadioButtonGroup
+              name="type"
+              defaultSelected="albums"
+              onChange={this.onChange}
+              style={{ width: 300 }}
+            >
+              <RadioButton
+                value="albums"
+                label="By albums"
+              />
+              <RadioButton
+                value="all_songs"
+                label="All songs"
+              />
+            </RadioButtonGroup>
+          </ToolbarGroup>
+          <ToolbarGroup>
+            <ToolbarTitle text={this.state.uri !== '' ? 'Now listening ' : ''} />
+            <iframe
+              title="spotify-widgit"
+              src={this.state.uri}
+              width="250"
+              height="80"
+              frameBorder="0"
+              allowTransparency="true"
+            />
+          </ToolbarGroup>
+        </Toolbar>
       </div>
     );
   }

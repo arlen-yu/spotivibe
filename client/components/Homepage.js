@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import Input from './Input';
 
 class Homepage extends Component {
@@ -35,9 +35,13 @@ class Homepage extends Component {
     }
 
     return (
-      <div>
-        <h1>TEMPO</h1>
-        <Input onSubmit={this.onSubmit} artistName={this.props.artistName || ''} />
+      <div className={this.props.landing ? 'mainHeadingLanding' : 'mainHeading'}>
+        <div className="inputWrapper">
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <p className="header">tempo</p>
+          </Link>
+          <Input onSubmit={this.onSubmit} artistName={this.props.artistName || ''} />
+        </div>
       </div>
     );
   }
@@ -45,10 +49,12 @@ class Homepage extends Component {
 
 Homepage.propTypes = {
   artistName: PropTypes.string,
+  landing: PropTypes.bool,
 };
 
 Homepage.defaultProps = {
   artistName: '',
+  landing: true,
 };
 
 export default Homepage;

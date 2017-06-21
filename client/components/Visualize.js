@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import PropTypes from 'prop-types';
 import Graph from './Graph';
 import ArtistCard from './ArtistCard';
@@ -7,19 +6,9 @@ import ArtistCard from './ArtistCard';
 class Visualize extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      type: 'albums',
-    };
-    this.onChange = this.onChange.bind(this);
+
     this.renderAlbumGraphs = this.renderAlbumGraphs.bind(this);
     this.renderAllSongGraphs = this.renderAllSongGraphs.bind(this);
-  }
-
-  onChange(event, value) {
-    event.preventDefault();
-    this.setState({
-      type: value,
-    });
   }
 
   renderAllSongGraphs() {
@@ -36,7 +25,7 @@ class Visualize extends Component {
             style={{ display: 'inline-block', width: '400px', height: '400px', float: 'left' }}
             key={el.albumName}
           >
-            <h1>{el.albumName}</h1>
+            <h2>{el.albumName}</h2>
             <Graph data={el.data.data} width={300} height={300} onClick={this.props.onClick} />
           </div>
         ))}
@@ -48,21 +37,7 @@ class Visualize extends Component {
     return (
       <div>
         <ArtistCard name={this.props.name} img={this.props.img} />
-        <RadioButtonGroup
-          name="type"
-          defaultSelected="albums"
-          onChange={this.onChange}
-        >
-          <RadioButton
-            value="albums"
-            label="By albums"
-          />
-          <RadioButton
-            value="all_songs"
-            label="All songs"
-          />
-        </RadioButtonGroup>
-        {this.state.type === 'albums' ? this.renderAlbumGraphs() : this.renderAllSongGraphs()}
+        {this.props.type === 'albums' ? this.renderAlbumGraphs() : this.renderAllSongGraphs()}
       </div>
     );
   }
@@ -74,6 +49,7 @@ Visualize.propTypes = {
   data: PropTypes.arrayOf(PropTypes.any).isRequired,
   onClick: PropTypes.func.isRequired,
   img: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default Visualize;

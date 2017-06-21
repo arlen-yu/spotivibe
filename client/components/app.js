@@ -7,14 +7,8 @@ import VisualizeContainer from './VisualizeContainer';
 
 injectTapEventPlugin();
 
-const style = {
-  margin: '0',
-  padding: '0',
-  fontFamily: 'sans-serif',
-};
-
 const App = () => (
-  <div style={style}>
+  <div>
     <MuiThemeProvider>
       <Switch>
         <Route exact path="/" component={Homepage} />

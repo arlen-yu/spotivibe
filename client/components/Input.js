@@ -7,7 +7,6 @@ const styles = {
     padding: '2px 6px',
     cursor: 'default',
   },
-
   highlightedItem: {
     color: 'white',
     background: 'hsl(200, 50%, 50%)',
@@ -36,10 +35,25 @@ class Input extends Component {
     this.state = {
       artistName: this.props.artistName || '',
       dataSource: [],
+      focus: false,
     };
 
     this.handleUpdateInput = this.handleUpdateInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  onFocus(event) {
+    event.preventDefault();
+    this.setState({ focus: true });
+  }
+
+  onBlur(event) {
+    event.preventDefault();
+    this.setState({ focus: false });
+  }
+
+  handleSubmit(item) {
+    this.props.onSubmit(item);
   }
 
   handleUpdateInput(event) {
@@ -54,16 +68,31 @@ class Input extends Component {
       });
   }
 
-  handleSubmit(item) {
-    this.props.onSubmit(item);
-  }
-
   render() {
+    const inputStyle = {
+      background: 'transparent',
+      border: 'none',
+      borderBottom: `2px solid ${this.state.focus ? '#B3CDFF' : '#4D8BFF'}`,
+      width: '900',
+      height: '40px',
+      fontSize: '30px',
+      outline: 'none',
+      padding: '0px 0px 0px 0px',
+      fontStyle: 'italic',
+    };
+
+
     return (
       <Autocomplete
         getItemValue={item => item.name}
         onSelect={(value, item) => {
           this.handleSubmit(item);
+        }}
+        inputProps={{
+          style: inputStyle,
+          onFocus: event => this.onFocus(event),
+          onBlur: event => this.onBlur(event),
+          placeholder: 'Enter an artist...',
         }}
         items={this.state.dataSource}
         value={this.state.artistName}
