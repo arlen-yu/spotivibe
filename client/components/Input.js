@@ -62,9 +62,11 @@ class Input extends Component {
     fetch(`/artist/id/${value}`)
       .then(res => res.json())
       .then((res) => {
-        this.setState({
-          dataSource: res.data,
-        });
+        if (res.data !== null) {
+          this.setState({
+            dataSource: res.data,
+          });
+        }
       });
   }
 
@@ -72,10 +74,11 @@ class Input extends Component {
     const inputStyle = {
       background: 'transparent',
       border: 'none',
-      borderBottom: `2px solid ${this.state.focus ? '#B3CDFF' : '#4D8BFF'}`,
+      borderBottom: `2px solid ${this.state.focus ? '#E1F5FE' : '#FAFAFA'}`,
       width: '900',
       height: '40px',
       fontSize: '30px',
+      color: '#FAFAFA',
       outline: 'none',
       padding: '0px 0px 0px 0px',
       fontStyle: 'italic',
@@ -94,6 +97,7 @@ class Input extends Component {
           onBlur: event => this.onBlur(event),
           placeholder: 'Enter an artist...',
         }}
+        open={this.state.dataSource.length > 0 && this.state.focus}
         items={this.state.dataSource}
         value={this.state.artistName}
         onChange={this.handleUpdateInput}

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui';
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import Visualize from './Visualize';
 import Homepage from './Homepage';
 
@@ -11,6 +10,7 @@ class VisualizeContainer extends Component {
     this.state = {
       officialName: '',
       artistImg: '',
+      artistPop: null,
       albumInfo: [],
       data: [],
       error: false,
@@ -60,6 +60,7 @@ class VisualizeContainer extends Component {
       this.setState({
         officialName: artistData.name,
         artistImg: artistData.images.length > 0 ? artistData.images[0].url : '',
+        artistPop: artistData.popularity,
       });
       fetch(`/albums/${artistData.id}`)
         .then(res => res.json())
@@ -97,43 +98,24 @@ class VisualizeContainer extends Component {
               ? <Visualize
                 name={this.state.officialName}
                 img={this.state.artistImg}
+                popularity={this.state.artistPop}
                 data={this.state.data}
                 onClick={this.onClick}
                 type={this.state.type}
+                handleRadioButton={this.onChange}
               />
               : <p>ERROR</p>}
           </div>
         </div>
-        <Toolbar style={{ position: 'fixed', bottom: 0, left: 0, height: 120, width: '100%' }}>
-          <ToolbarGroup>
-            <RadioButtonGroup
-              name="type"
-              defaultSelected="albums"
-              onChange={this.onChange}
-              style={{ width: 300 }}
-            >
-              <RadioButton
-                value="albums"
-                label="By albums"
-              />
-              <RadioButton
-                value="all_songs"
-                label="All songs"
-              />
-            </RadioButtonGroup>
-          </ToolbarGroup>
-          <ToolbarGroup>
-            <ToolbarTitle text={this.state.uri !== '' ? 'Now listening ' : ''} />
-            <iframe
-              title="spotify-widgit"
-              src={this.state.uri}
-              width="250"
-              height="80"
-              frameBorder="0"
-              allowTransparency="true"
-            />
-          </ToolbarGroup>
-        </Toolbar>
+        <iframe
+          title="spotify-widgit"
+          src={this.state.uri}
+          style={{ position: 'fixed', bottom: 20, right: 20 }}
+          width="250"
+          height="80"
+          frameBorder="0"
+          allowTransparency="true"
+        />
       </div>
     );
   }

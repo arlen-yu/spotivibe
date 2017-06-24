@@ -36,7 +36,12 @@ class Visualize extends Component {
   render() {
     return (
       <div>
-        <ArtistCard name={this.props.name} img={this.props.img} />
+        <ArtistCard
+          name={this.props.name}
+          img={this.props.img}
+          popularity={this.props.popularity}
+          handleRadioButton={this.props.handleRadioButton}
+        />
         {this.props.type === 'albums' ? this.renderAlbumGraphs() : this.renderAllSongGraphs()}
       </div>
     );
@@ -49,7 +54,9 @@ Visualize.propTypes = {
   data: PropTypes.arrayOf(PropTypes.any).isRequired,
   onClick: PropTypes.func.isRequired,
   img: PropTypes.string.isRequired,
+  popularity: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
+  handleRadioButton: PropTypes.func.isRequired,
 };
 
 export default Visualize;

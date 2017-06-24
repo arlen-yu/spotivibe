@@ -95,7 +95,7 @@ router.get('/artist/id/:artistName', (req, res) => {
         return getArtistIdByName(req.params.artistName);
       })
       .then((response) => {
-        if (response) {
+        if (response && response.length !== 0) {
           res.json({ data: response });
         } else {
           res.json({ data: null });

@@ -24,8 +24,8 @@ app.use(express.static(path.join(__dirname, '../client')));
 app.use('/', indexRoutes);
 
 // ERROR HANDLER //
-app.use((err, req, res) => {
-  res.status(err.status || 500);
+app.use((req, res) => {
+  res.status(500);
 });
 
 module.exports = app;

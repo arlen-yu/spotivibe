@@ -20,8 +20,11 @@ module.exports = {
       use: ['style-loader', 'css-loader'],
     },
     {
-      test: /\.(eot|ttf|wav|mp3)(\?.*)?$/,
+      test: /\.(eot|ttf|wav|mp3|jpg|jpeg|png)(\?.*)?$/,
       loader: 'file-loader',
+      query: {
+        useRelativePath: true,
+      },
     }],
   },
 };
