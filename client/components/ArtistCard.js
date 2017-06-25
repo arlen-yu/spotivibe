@@ -5,22 +5,23 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 const imgWrapperStyle = {
   display: 'inline-block',
   position: 'relative',
-  width: '220px',
-  height: '220px',
+  width: '170px',
+  height: '170px',
   overflow: 'hidden',
   borderRadius: '50%',
 };
 
 const headerStyle = {
   verticalAlign: 'top',
-  fontSize: 56,
+  fontSize: 44,
+  width: 300,
   fontWeight: 'bold',
 };
 
 const popularityStyle = {
   verticalAlign: 'top',
   marginTop: -50,
-  fontSize: 36,
+  fontSize: 28,
   fontStyle: 'italic',
 };
 
@@ -31,11 +32,11 @@ class ArtistCard extends Component {
 
   render() {
     return (
-      <div style={{ margin: 'auto', width: '50%', padding: 30, paddingBottom: 0 }}>
+      <div style={{ margin: 'auto', width: '550', padding: 30, paddingBottom: 0, zIndex: -1 }}>
         <div style={imgWrapperStyle}>
           <img alt="" src={this.props.img} style={{ width: 'auto', height: '100%' }} />
         </div>
-        <div style={{ display: 'inline-block', position: 'relative', top: -100, padding: 30 }}>
+        <div style={{ display: 'inline-block', position: 'relative', top: -80, padding: 30 }}>
           <p style={headerStyle}>{this.props.name}</p>
           {this.props.popularity
             ? <p style={popularityStyle}>{`Popularity: ${this.props.popularity}`}</p>

@@ -39,20 +39,21 @@ class Homepage extends Component {
 
     return (
       <div>
-        <Toolbar style={{ backgroundColor: '#212121', height: 80 }}>
+        <Toolbar style={{ backgroundColor: '#212121', height: 60 }}>
           <ToolbarGroup firstChild>
             <ToolbarTitle text={
               <Link
                 to="/"
                 style={{
                   textDecoration: 'none',
-                  fontSize: '36px',
+                  fontSize: '28px',
                   fontFamily: 'Karla',
                   color: '#FAFAFA',
-                  padding: 20,
+                  paddingLeft: 30,
+                  paddingRight: 30,
                 }}
               >
-                <p className="header">SPOTIFY TEMPO</p>
+                <p className="header">SPOTIVIBE</p>
               </Link>}
             />
             <Input onSubmit={this.onSubmit} artistName={this.props.artistName || ''} />

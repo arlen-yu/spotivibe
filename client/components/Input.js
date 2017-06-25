@@ -14,7 +14,16 @@ const styles = {
     cursor: 'default',
   },
   menu: {
+    borderRadius: '3px',
+    boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+    background: 'rgba(255, 255, 255, 0.9)',
+    padding: '2px 0',
+    fontSize: '90%',
+    position: 'fixed',
+    overflow: 'auto',
+    maxHeight: '50%',
     border: 'solid 1px #ccc',
+    zIndex: 99,
   },
 };
 
@@ -76,8 +85,8 @@ class Input extends Component {
       border: 'none',
       borderBottom: `2px solid ${this.state.focus ? '#E1F5FE' : '#FAFAFA'}`,
       width: '900',
-      height: '40px',
-      fontSize: '30px',
+      height: '30px',
+      fontSize: '24px',
       color: '#FAFAFA',
       outline: 'none',
       padding: '0px 0px 0px 0px',
@@ -101,6 +110,8 @@ class Input extends Component {
         items={this.state.dataSource}
         value={this.state.artistName}
         onChange={this.handleUpdateInput}
+        wrapperStyle={{ padding: 20 }}
+        menuStyle={styles.menu}
         renderItem={renderItem}
       />
     );

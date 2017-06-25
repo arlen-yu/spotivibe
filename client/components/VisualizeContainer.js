@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui';
 import Visualize from './Visualize';
 import Homepage from './Homepage';
 
@@ -56,7 +55,7 @@ class VisualizeContainer extends Component {
   }
 
   fetchData(artistData) {
-    if (artistData) {
+    if (artistData && artistData.id) {
       this.setState({
         officialName: artistData.name,
         artistImg: artistData.images.length > 0 ? artistData.images[0].url : '',

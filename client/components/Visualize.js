@@ -14,18 +14,39 @@ class Visualize extends Component {
   renderAllSongGraphs() {
     let allSongData = [];
     this.props.data.map(el => (allSongData = [...allSongData, ...el.data.data]));
-    return <Graph data={allSongData} width={800} height={800} onClick={this.props.onClick} />;
+    return (
+      <div style={{ width: 800, margin: 'auto' }}>
+        <p style={{ width: 150, margin: 'auto', fontSize: 34, fontWeight: 'bold' }}>All songs</p>
+        <Graph data={allSongData} width={800} height={800} onClick={this.props.onClick} />
+      </div>
+    );
   }
 
   renderAlbumGraphs() {
+    const style = {
+      container: {
+        display: 'inline-block',
+        width: 400,
+        height: 400,
+        margin: 'auto',
+      },
+      header: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        width: 300,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+      },
+    };
     return (
-      <div style={{ display: 'inline-block' }}>
+      <div style={{ display: 'inline-block', textAlign: 'center', width: '100%' }}>
         {this.props.data.map(el => (
           <div
-            style={{ display: 'inline-block', width: '400px', height: '400px', float: 'left' }}
+            style={style.container}
             key={el.albumName}
           >
-            <h2>{el.albumName}</h2>
+            <p style={style.header}>{el.albumName}</p>
             <Graph data={el.data.data} width={300} height={300} onClick={this.props.onClick} />
           </div>
         ))}
@@ -35,7 +56,7 @@ class Visualize extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ margin: '0 auto', width: '100%', zDepth: -1 }}>
         <ArtistCard
           name={this.props.name}
           img={this.props.img}
