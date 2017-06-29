@@ -16,14 +16,14 @@ class Homepage extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.artistName !== this.props.artistName) {
-      this.setState({ redirect: false });
-    }
+  componentWillReceiveProps() {
+    this.setState({ redirect: false, artistData: null });
   }
 
   onSubmit(artistData) {
-    this.setState({ redirect: true, artistData });
+    if (artistData !== this.state.artistData) {
+      this.setState({ redirect: true, artistData });
+    }
   }
 
   render() {
@@ -75,7 +75,6 @@ Homepage.propTypes = {
 
 Homepage.defaultProps = {
   artistName: '',
-  landing: true,
 };
 
 export default Homepage;

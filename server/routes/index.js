@@ -76,6 +76,20 @@ function getAudioFeatures(trackInfo) {
     ));
 }
 
+function getPlaylistTracks(user, playlistId) {
+  return spotifyApi.getPlaylist(user, playlistId)
+    .then((data) => {
+      const tracks = data.body.tracks.items.map(trackInfo => trackInfo.track);
+      return tracks;
+    });
+}
+
+function getPlaylistData(user, playlistId) {
+  return getPlaylistTracks(user, playlistId)
+    .then(response => getAudioFeatures(response))
+    .then(features => features)
+}
+
 function getAlbumData(albumId) {
   return getAlbumTracks(albumId)
     .then(response => getAudioFeatures(response))
@@ -113,8 +127,20 @@ router.get('/albums/:artistId', (req, res) => {
   }
 });
 
+router.get('/playlist/top100', (req, res) => {
+  if (req.params.artistId !== 'bundle.js') {
+    authorize()
+      .then((token) => {
+        spotifyApi.setAccessToken(token);
+        return getPlaylistData('billboard.com', '6UeSakyzhiEt4NB3UAd6NQ');
+      })
+      .then((response) => {
+        res.json({ data: response });
+      });
+  }
+});
+
 router.get('/visualize/feature/:albumName', (req, res) => {
-  authorize();
   if (req.params.albumName !== 'bundle.js') {
     getAlbumData(req.params.albumName)
       .then((response) => {

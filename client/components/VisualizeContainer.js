@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Visualize from './Visualize';
 import Homepage from './Homepage';
+import Billboard from './Billboard';
 
 class VisualizeContainer extends Component {
   constructor(props) {
@@ -15,7 +16,6 @@ class VisualizeContainer extends Component {
       error: false,
       uri: '',
       type: 'albums',
-      ready: false, // should be false to start
     };
     this.fetchData = this.fetchData.bind(this);
     this.onClick = this.onClick.bind(this);
@@ -24,13 +24,20 @@ class VisualizeContainer extends Component {
 
   componentDidMount() {
     // FETCH DATA FROM API...
-    this.fetchData(this.props.location.state.artistData);
+    if (this.props.location.pathname !== '/') {
+      this.fetchData(this.props.location.state.artistData);
+    } else {
+      this.resetState();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params.artistName !== this.props.match.params.artistName) {
+    if (nextProps.match.params.artistName !== this.props.match.params.artistName
+          && nextProps.location.pathname !== '/') {
       this.resetState();
       this.fetchData(nextProps.location.state.artistData);
+    } else if (nextProps.location.pathname === '/') {
+      this.resetState();
     }
   }
 
@@ -50,7 +57,6 @@ class VisualizeContainer extends Component {
       albumInfo: [],
       data: [],
       error: false,
-      ready: false,
     });
   }
 
@@ -88,12 +94,16 @@ class VisualizeContainer extends Component {
   }
 
   render() {
+    const artistName = this.props.location.pathname === '/' ? '' : this.props.match.params.artistName;
     return (
       <div style={{ position: 'relative' }}>
-        <div style={{ paddingBottom: '120' }}>
-          <Homepage artistName={this.props.match.params.artistName} landing={false} />
+        <div style={{ paddingBottom: '120px' }}>
+          <Homepage artistName={artistName} landing={false} />
           <div>
-            {!this.state.error
+            {this.props.location.pathname === '/'
+              ? <Billboard onClick={this.onClick} />
+              : null}
+            {!this.state.error && this.state.data.length
               ? <Visualize
                 name={this.state.officialName}
                 img={this.state.artistImg}
@@ -103,7 +113,7 @@ class VisualizeContainer extends Component {
                 type={this.state.type}
                 handleRadioButton={this.onChange}
               />
-              : <p>ERROR</p>}
+              : null}
           </div>
         </div>
         <iframe

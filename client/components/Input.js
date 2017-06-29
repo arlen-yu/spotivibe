@@ -45,10 +45,16 @@ class Input extends Component {
       artistName: this.props.artistName || '',
       dataSource: [],
       focus: false,
+      open: false,
     };
 
     this.handleUpdateInput = this.handleUpdateInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ artistName: nextProps.artistName || '' });
   }
 
   onFocus(event) {
@@ -61,19 +67,29 @@ class Input extends Component {
     this.setState({ focus: false });
   }
 
+  onKeyPress(event) {
+    if (event.key === 'Enter') {
+      this.handleUpdateInput();
+    }
+  }
+
+  onChange(event) {
+    const value = event.target.value;
+    this.setState({ artistName: value });
+  }
+
   handleSubmit(item) {
     this.props.onSubmit(item);
   }
 
-  handleUpdateInput(event) {
-    const value = event.target.value;
-    this.setState({ artistName: value });
-    fetch(`/artist/id/${value}`)
+  handleUpdateInput() {
+    fetch(`/artist/id/${this.state.artistName}`)
       .then(res => res.json())
       .then((res) => {
         if (res.data !== null) {
           this.setState({
             dataSource: res.data,
+            open: true,
           });
         }
       });
@@ -84,7 +100,7 @@ class Input extends Component {
       background: 'transparent',
       border: 'none',
       borderBottom: `2px solid ${this.state.focus ? '#E1F5FE' : '#FAFAFA'}`,
-      width: '900',
+      width: '900px',
       height: '30px',
       fontSize: '24px',
       color: '#FAFAFA',
@@ -104,12 +120,14 @@ class Input extends Component {
           style: inputStyle,
           onFocus: event => this.onFocus(event),
           onBlur: event => this.onBlur(event),
+          onKeyPress: event => this.onKeyPress(event),
           placeholder: 'Enter an artist...',
         }}
-        open={this.state.dataSource.length > 0 && this.state.focus}
+        autoHighlight
+        open={this.state.open}
         items={this.state.dataSource}
         value={this.state.artistName}
-        onChange={this.handleUpdateInput}
+        onChange={this.onChange}
         wrapperStyle={{ padding: 20 }}
         menuStyle={styles.menu}
         renderItem={renderItem}
