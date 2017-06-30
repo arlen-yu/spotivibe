@@ -5,15 +5,15 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 const imgWrapperStyle = {
   display: 'inline-block',
   position: 'relative',
-  width: '170px',
-  height: '170px',
+  width: '150px',
+  height: '150px',
   overflow: 'hidden',
   borderRadius: '50%',
 };
 
 const headerStyle = {
   verticalAlign: 'top',
-  fontSize: 44,
+  fontSize: 40,
   width: 300,
   fontWeight: 'bold',
 };
@@ -21,7 +21,7 @@ const headerStyle = {
 const popularityStyle = {
   verticalAlign: 'top',
   marginTop: -50,
-  fontSize: 28,
+  fontSize: 24,
   fontStyle: 'italic',
 };
 
@@ -32,7 +32,7 @@ class ArtistCard extends Component {
 
   render() {
     return (
-      <div style={{ margin: 'auto', width: '550', padding: 30, paddingBottom: 0, zIndex: -1 }}>
+      <div style={{ margin: 'auto', width: '550', padding: 30, marginBottom: -60, zIndex: -1 }}>
         <div style={imgWrapperStyle}>
           <img alt="" src={this.props.img} style={{ width: 'auto', height: '100%' }} />
         </div>

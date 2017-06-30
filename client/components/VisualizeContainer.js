@@ -57,6 +57,7 @@ class VisualizeContainer extends Component {
       albumInfo: [],
       data: [],
       error: false,
+      type: 'albums',
     });
   }
 
@@ -66,6 +67,7 @@ class VisualizeContainer extends Component {
         officialName: artistData.name,
         artistImg: artistData.images.length > 0 ? artistData.images[0].url : '',
         artistPop: artistData.popularity,
+        loading: true,
       });
       fetch(`/albums/${artistData.id}`)
         .then(res => res.json())

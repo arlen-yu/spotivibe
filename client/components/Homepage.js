@@ -39,14 +39,14 @@ class Homepage extends Component {
 
     return (
       <div>
-        <Toolbar style={{ backgroundColor: '#212121', height: 60 }}>
+        <Toolbar style={{ backgroundColor: '#212121', height: 50 }}>
           <ToolbarGroup firstChild>
             <ToolbarTitle text={
               <Link
                 to="/"
                 style={{
                   textDecoration: 'none',
-                  fontSize: '28px',
+                  fontSize: '24px',
                   fontFamily: 'Karla',
                   color: '#FAFAFA',
                   paddingLeft: 30,

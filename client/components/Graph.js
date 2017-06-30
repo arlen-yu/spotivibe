@@ -10,7 +10,7 @@ const CustomLabel = (props) => {
   + (props.angle === 0 ? props.viewBox.height + 5 : props.viewBox.height / 2);
   const style = {
     fontWeight: 'light',
-    fontSize: 12,
+    fontSize: props.fontSize,
   };
   return (
     <Text
@@ -27,6 +27,7 @@ CustomLabel.propTypes = {
   children: PropTypes.string.isRequired,
   angle: PropTypes.number,
   viewBox: PropTypes.object.isRequired,
+  fontSize: PropTypes.number.isRequired,
 };
 
 CustomLabel.defaultProps = {
@@ -48,6 +49,7 @@ class Graph extends Component {
   }
 
   render() {
+    const fontSize = this.props.width / 20;
     return (
       <ScatterChart
         width={this.props.width || 300}
@@ -58,19 +60,24 @@ class Graph extends Component {
           type="number"
           dataKey="danceability"
           name="danceability"
-          label={<CustomLabel>Danceability</CustomLabel>}
+          label={<CustomLabel fontSize={fontSize}>Danceability</CustomLabel>}
         />
         <YAxis
           type="number"
           dataKey="energy"
           name="energy"
-          label={<CustomLabel angle={90}>Energy</CustomLabel>}
+          label={<CustomLabel angle={90} fontSize={fontSize}>Energy</CustomLabel>}
         />
-        <Tooltip content={
-          <CustomTooltip onClick={this.props.onClick} payload={this.props.data} />
+        <Tooltip
+          content={
+            <CustomTooltip
+              onClick={this.props.onClick}
+              payload={this.props.data}
+            />
           }
+          cursor={{ strokeDasharray: '5 5' }}
         />
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid strokeDasharray="1 1" />
         <Scatter name="temp" data={this.props.data} fill="#1ED760" />
       </ScatterChart>
     );

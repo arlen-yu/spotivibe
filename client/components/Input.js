@@ -99,10 +99,10 @@ class Input extends Component {
     const inputStyle = {
       background: 'transparent',
       border: 'none',
-      borderBottom: `2px solid ${this.state.focus ? '#E1F5FE' : '#FAFAFA'}`,
+      borderBottom: `2px solid ${this.state.focus ? '#1ED760' : '#FAFAFA'}`,
       width: '900px',
-      height: '30px',
-      fontSize: '24px',
+      height: '26px',
+      fontSize: '20px',
       color: '#FAFAFA',
       outline: 'none',
       padding: '0px 0px 0px 0px',

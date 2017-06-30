@@ -15,9 +15,9 @@ class Visualize extends Component {
     let allSongData = [];
     this.props.data.map(el => (allSongData = [...allSongData, ...el.data.data]));
     return (
-      <div style={{ width: 800, margin: 'auto' }}>
+      <div style={{ width: 500, margin: 'auto' }}>
         <p style={{ width: 150, margin: 'auto', fontSize: 34, fontWeight: 'bold' }}>All songs</p>
-        <Graph data={allSongData} width={800} height={800} onClick={this.props.onClick} />
+        <Graph data={allSongData} width={500} height={500} onClick={this.props.onClick} />
       </div>
     );
   }
@@ -26,14 +26,14 @@ class Visualize extends Component {
     const style = {
       container: {
         display: 'inline-block',
-        width: 400,
-        height: 400,
+        width: 300,
+        height: 300,
         margin: 'auto',
       },
       header: {
         fontSize: 14,
         fontWeight: 'bold',
-        width: 300,
+        width: 250,
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
@@ -47,7 +47,7 @@ class Visualize extends Component {
             key={el.albumName}
           >
             <p style={style.header}>{el.albumName}</p>
-            <Graph data={el.data.data} width={300} height={300} onClick={this.props.onClick} />
+            <Graph data={el.data.data} width={250} height={250} onClick={this.props.onClick} />
           </div>
         ))}
       </div>
