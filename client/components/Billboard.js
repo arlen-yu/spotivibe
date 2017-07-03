@@ -10,10 +10,11 @@ const styles = {
   },
   infoStyle: {
     fontSize: 18,
-    width: '550',
+    width: '550px',
     margin: 'auto',
   },
 };
+
 class Billboard extends Component {
   constructor(props) {
     super(props);
@@ -22,9 +23,11 @@ class Billboard extends Component {
     };
     this.fetchData = this.fetchData.bind(this);
   }
+
   componentDidMount() {
     this.fetchData();
   }
+
   componentWillReceiveProps() {
     this.fetchData();
   }
@@ -51,7 +54,7 @@ class Billboard extends Component {
             <p style={{ fontSize: 28 }}>Billboard Top 100</p>
             <Graph data={this.state.trackData} width={550} height={550} onClick={onClick} />
           </div>
-          : <div style={{ width: 80, margin: 'auto', marginTop: '200', textAlign: 'center' }}>
+          : <div style={{ width: 80, margin: 'auto', marginTop: '200px', textAlign: 'center' }}>
             <p>Loading... </p>
             <CircularProgress
               size={80}

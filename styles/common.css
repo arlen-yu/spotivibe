@@ -31,6 +31,18 @@ body {
   text-decoration: none;
 }
 
+:global .app-content{
+  margin: 0 0 0 0;
+  padding-top: 64px;
+  padding-right: 20px !important;
+  transition: padding-left ease-out 0.1s;
+}
+
+:global .app-content.expanded{
+  padding-left: 255px;
+  transition: padding-left ease-in 0.1s;
+}
+
 @font-face {
   font-family: 'PT Sans', sans-serif;
   src: url('../assets/PT_Sans-Web-Regular.ttf')

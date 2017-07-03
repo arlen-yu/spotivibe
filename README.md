@@ -8,3 +8,4 @@
 
 ## BUG TABLE
 - Input not appearing on redirect to the same artist ✓
+- Is billboard rendering when it's not supposed to ?

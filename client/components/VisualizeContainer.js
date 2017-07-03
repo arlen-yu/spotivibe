@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import Drawer from './Drawer';
 import Visualize from './Visualize';
 import Homepage from './Homepage';
 import Billboard from './Billboard';
@@ -8,22 +10,24 @@ class VisualizeContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      officialName: '',
       artistImg: '',
       artistPop: null,
-      albumInfo: [],
       data: [],
       error: false,
-      uri: '',
+      menu: false,
+      officialName: '',
       type: 'albums',
+      uri: '',
+      playlistSongs: [],
     };
     this.fetchData = this.fetchData.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.handleAddArtist = this.handleAddArtist.bind(this);
+    this.handleMenuToggle = this.handleMenuToggle.bind(this);
   }
 
   componentDidMount() {
-    // FETCH DATA FROM API...
     if (this.props.location.pathname !== '/') {
       this.fetchData(this.props.location.state.artistData);
     } else {
@@ -32,12 +36,10 @@ class VisualizeContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    this.resetState();
     if (nextProps.match.params.artistName !== this.props.match.params.artistName
           && nextProps.location.pathname !== '/') {
-      this.resetState();
       this.fetchData(nextProps.location.state.artistData);
-    } else if (nextProps.location.pathname === '/') {
-      this.resetState();
     }
   }
 
@@ -73,7 +75,6 @@ class VisualizeContainer extends Component {
         .then(res => res.json())
         .then((res) => {
           if (res.albumInfo) {
-            this.setState({ albumInfo: res.albumInfo });
             return res.albumInfo;
           }
           return false;
@@ -95,38 +96,79 @@ class VisualizeContainer extends Component {
     }
   }
 
+  handleMenuToggle() {
+    this.setState({ menu: !this.state.menu });
+  }
+
+  handleAddArtist() {
+    let allSongData = [];
+    this.state.data.map(el => (allSongData = [...allSongData, ...el.data.data]));
+    this.setState({ playlistSongs: allSongData });
+  }
+
   render() {
-    const artistName = this.props.location.pathname === '/' ? '' : this.props.match.params.artistName;
+    const {
+      match,
+      location,
+    } = this.props;
+
+    const {
+      artistImg,
+      artistPop,
+      data,
+      error,
+      menu,
+      officialName,
+      playlistSongs,
+      type,
+      uri,
+    } = this.state;
+
+    const artistName = location.pathname === '/' ? '' : match.params.artistName;
+
     return (
       <div style={{ position: 'relative' }}>
         <div style={{ paddingBottom: '120px' }}>
-          <Homepage artistName={artistName} landing={false} />
-          <div>
-            {this.props.location.pathname === '/'
-              ? <Billboard onClick={this.onClick} />
-              : null}
-            {!this.state.error && this.state.data.length
-              ? <Visualize
-                name={this.state.officialName}
-                img={this.state.artistImg}
-                popularity={this.state.artistPop}
-                data={this.state.data}
-                onClick={this.onClick}
-                type={this.state.type}
-                handleRadioButton={this.onChange}
-              />
-              : null}
+          <Drawer
+            menu={menu}
+            handleAddArtist={this.handleAddArtist}
+            handleMenuToggle={this.handleMenuToggle}
+            name={officialName}
+            playlistSongs={playlistSongs}
+          />
+          <div style={{ paddingTop: 50 }}>
+            <Homepage
+              artistName={artistName}
+              landing={false}
+              onToggleMenu={this.handleMenuToggle}
+            />
+            <div className={classnames('app-content', { expanded: menu })}>
+              {location.pathname === '/'
+                ? <Billboard onClick={this.onClick} />
+                : null}
+              {!error && data.length
+                ? <Visualize
+                  name={officialName}
+                  img={artistImg}
+                  popularity={artistPop}
+                  data={data}
+                  onClick={this.onClick}
+                  type={type}
+                  handleRadioButton={this.onChange}
+                />
+                : null}
+            </div>
           </div>
+          <iframe
+            title="spotify-widgit"
+            src={uri}
+            style={{ position: 'fixed', bottom: 20, right: 20 }}
+            width="250"
+            height="80"
+            frameBorder="0"
+            allowTransparency="true"
+          />
         </div>
-        <iframe
-          title="spotify-widgit"
-          src={this.state.uri}
-          style={{ position: 'fixed', bottom: 20, right: 20 }}
-          width="250"
-          height="80"
-          frameBorder="0"
-          allowTransparency="true"
-        />
       </div>
     );
   }

@@ -2,27 +2,27 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
-const imgWrapperStyle = {
-  display: 'inline-block',
-  position: 'relative',
-  width: '150px',
-  height: '150px',
-  overflow: 'hidden',
-  borderRadius: '50%',
-};
-
-const headerStyle = {
-  verticalAlign: 'top',
-  fontSize: 40,
-  width: 300,
-  fontWeight: 'bold',
-};
-
-const popularityStyle = {
-  verticalAlign: 'top',
-  marginTop: -50,
-  fontSize: 24,
-  fontStyle: 'italic',
+const styles = {
+  imgWrapperStyle: {
+    display: 'inline-block',
+    position: 'relative',
+    width: '150px',
+    height: '150px',
+    overflow: 'hidden',
+    borderRadius: '50%',
+  },
+  headerStyle: {
+    verticalAlign: 'top',
+    fontSize: 40,
+    width: 300,
+    fontWeight: 'bold',
+  },
+  popularityStyle: {
+    verticalAlign: 'top',
+    marginTop: -50,
+    fontSize: 24,
+    fontStyle: 'italic',
+  },
 };
 
 class ArtistCard extends Component {
@@ -31,20 +31,27 @@ class ArtistCard extends Component {
   }
 
   render() {
+    const {
+      name,
+      img,
+      popularity,
+      handleRadioButton,
+    } = this.props;
+
     return (
-      <div style={{ margin: 'auto', width: '550', padding: 30, marginBottom: -60, zIndex: -1 }}>
-        <div style={imgWrapperStyle}>
-          <img alt="" src={this.props.img} style={{ width: 'auto', height: '100%' }} />
+      <div style={{ margin: 'auto', width: '550px', padding: 30, paddingTop: 0, marginBottom: -60, zIndex: -1 }}>
+        <div style={styles.imgWrapperStyle}>
+          <img alt="" src={img} style={{ width: 'auto', height: '100%' }} />
         </div>
         <div style={{ display: 'inline-block', position: 'relative', top: -80, padding: 30 }}>
-          <p style={headerStyle}>{this.props.name}</p>
-          {this.props.popularity
-            ? <p style={popularityStyle}>{`Popularity: ${this.props.popularity}`}</p>
+          <p style={styles.headerStyle}>{name}</p>
+          {popularity
+            ? <p style={styles.popularityStyle}>{`Popularity: ${popularity}`}</p>
             : null}
           <RadioButtonGroup
             name="type"
             defaultSelected="albums"
-            onChange={this.props.handleRadioButton}
+            onChange={handleRadioButton}
             style={{ width: 300, fontFamily: 'inherit', marginTop: -20 }}
           >
             <RadioButton

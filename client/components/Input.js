@@ -109,6 +109,12 @@ class Input extends Component {
       fontStyle: 'italic',
     };
 
+    const {
+      artistName,
+      dataSource,
+      focus, // eslint-disable-line no-unused-vars
+      open, // eslint-disable-line no-unused-vars
+    } = this.state;
 
     return (
       <Autocomplete
@@ -125,8 +131,8 @@ class Input extends Component {
         }}
         autoHighlight
         open={this.state.open}
-        items={this.state.dataSource}
-        value={this.state.artistName}
+        items={dataSource}
+        value={artistName}
         onChange={this.onChange}
         wrapperStyle={{ padding: 20 }}
         menuStyle={styles.menu}

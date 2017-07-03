@@ -31,13 +31,18 @@ class CustomTooltip extends Component {
         width: 200,
       },
     };
-    if (this.props && this.props.payload.length !== 0) {
-      const payload = this.props.payload[0].payload;
+
+    const {
+      payload,
+      onClick, // eslint-disable-line no-unused-vars
+    } = this.props;
+
+    if (this.props && payload.length !== 0) {
       return (
         <Paper style={styles.paper} zDepth={2}>
-          <p style={styles.name}>{payload.name}</p>
-          <p style={styles.info}>{`danceability: ${this.props.payload[0].value}`}</p>
-          <p style={styles.info}>{`energy: ${this.props.payload[1].value}`}</p>
+          <p style={styles.name}>{payload[0].payload.name}</p>
+          <p style={styles.info}>{`danceability: ${payload[0].value}`}</p>
+          <p style={styles.info}>{`energy: ${payload[1].value}`}</p>
         </Paper>
       );
     }

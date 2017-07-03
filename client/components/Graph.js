@@ -50,10 +50,17 @@ class Graph extends Component {
 
   render() {
     const fontSize = this.props.width / 20;
+    const {
+      width,
+      height,
+      data,
+      onClick,
+    } = this.props;
+
     return (
       <ScatterChart
-        width={this.props.width || 300}
-        height={this.props.height || 300}
+        width={width || 300}
+        height={height || 300}
         margin={{ top: 20, right: 20, bottom: 10, left: 10 }}
       >
         <XAxis
@@ -71,14 +78,14 @@ class Graph extends Component {
         <Tooltip
           content={
             <CustomTooltip
-              onClick={this.props.onClick}
-              payload={this.props.data}
+              onClick={onClick}
+              payload={data}
             />
           }
           cursor={{ strokeDasharray: '5 5' }}
         />
         <CartesianGrid strokeDasharray="1 1" />
-        <Scatter name="temp" data={this.props.data} fill="#1ED760" />
+        <Scatter name="temp" data={data} fill="#1ED760" />
       </ScatterChart>
     );
   }

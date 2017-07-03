@@ -55,15 +55,25 @@ class Visualize extends Component {
   }
 
   render() {
+    const {
+      name,
+      data, // eslint-disable-line no-unused-vars
+      onClick, // eslint-disable-line no-unused-vars
+      img,
+      popularity,
+      type,
+      handleRadioButton,
+    } = this.props;
+
     return (
       <div style={{ margin: '0 auto', width: '100%', zDepth: -1 }}>
         <ArtistCard
-          name={this.props.name}
-          img={this.props.img}
-          popularity={this.props.popularity}
-          handleRadioButton={this.props.handleRadioButton}
+          name={name}
+          img={img}
+          popularity={popularity}
+          handleRadioButton={handleRadioButton}
         />
-        {this.props.type === 'albums' ? this.renderAlbumGraphs() : this.renderAllSongGraphs()}
+        {type === 'albums' ? this.renderAlbumGraphs() : this.renderAllSongGraphs()}
       </div>
     );
   }
