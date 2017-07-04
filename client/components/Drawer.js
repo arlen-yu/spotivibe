@@ -51,10 +51,18 @@ const CustomDrawer = props => (
       </ToolbarGroup>
     </Toolbar>
     <div style={{ padding: 10 }}>
-      <p>Danceability:</p>
-      <Slider style={{ marginTop: '-10px', marginBottom: '-30px' }} />
-      <p>Energy:</p>
-      <Slider style={{ marginTop: '-10px', marginBottom: '-30px' }} />
+      <p>Danceability: {props.danceability}</p>
+      <Slider
+        style={{ marginTop: '-10px', marginBottom: '-30px' }}
+        value={props.danceability}
+        onChange={(event, newValue) => props.handleSliderChange(newValue, 'danceability')}
+      />
+      <p>Energy: {props.energy}</p>
+      <Slider
+        style={{ marginTop: '-10px', marginBottom: '-30px' }}
+        value={props.energy}
+        onChange={(event, newValue) => props.handleSliderChange(newValue, 'energy')}
+      />
     </div>
     <RaisedButton
       label={`Add ${props.name} to playlist`}
@@ -69,10 +77,13 @@ const CustomDrawer = props => (
 );
 
 CustomDrawer.propTypes = {
+  energy: PropTypes.number.isRequired,
+  danceability: PropTypes.number.isRequired,
   menu: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   handleMenuToggle: PropTypes.func.isRequired,
   handleAddArtist: PropTypes.func.isRequired,
+  handleSliderChange: PropTypes.func.isRequired,
   playlistSongs: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
 

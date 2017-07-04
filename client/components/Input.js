@@ -100,7 +100,7 @@ class Input extends Component {
       background: 'transparent',
       border: 'none',
       borderBottom: `2px solid ${this.state.focus ? '#1ED760' : '#FAFAFA'}`,
-      width: '900px',
+      width: '600px',
       height: '26px',
       fontSize: '20px',
       color: '#FAFAFA',
@@ -117,27 +117,29 @@ class Input extends Component {
     } = this.state;
 
     return (
-      <Autocomplete
-        getItemValue={item => item.name}
-        onSelect={(value, item) => {
-          this.handleSubmit(item);
-        }}
-        inputProps={{
-          style: inputStyle,
-          onFocus: event => this.onFocus(event),
-          onBlur: event => this.onBlur(event),
-          onKeyPress: event => this.onKeyPress(event),
-          placeholder: 'Enter an artist...',
-        }}
-        autoHighlight
-        open={this.state.open}
-        items={dataSource}
-        value={artistName}
-        onChange={this.onChange}
-        wrapperStyle={{ padding: 20 }}
-        menuStyle={styles.menu}
-        renderItem={renderItem}
-      />
+      <div style={{ paddingLeft: 100 }}>
+        <Autocomplete
+          getItemValue={item => item.name}
+          onSelect={(value, item) => {
+            this.handleSubmit(item);
+          }}
+          inputProps={{
+            style: inputStyle,
+            onFocus: event => this.onFocus(event),
+            onBlur: event => this.onBlur(event),
+            onKeyPress: event => this.onKeyPress(event),
+            placeholder: 'Enter an artist...',
+          }}
+          autoHighlight
+          open={this.state.open}
+          items={dataSource}
+          value={artistName}
+          onChange={this.onChange}
+          wrapperStyle={{ padding: 20 }}
+          menuStyle={styles.menu}
+          renderItem={renderItem}
+        />
+      </div>
     );
   }
 }

@@ -72,8 +72,6 @@ class Homepage extends Component {
                 <p className="header">SPOTIVIBE</p>
               </Link>}
             />
-          </ToolbarGroup>
-          <ToolbarGroup>
             <Input onSubmit={this.onSubmit} artistName={artistName || ''} />
           </ToolbarGroup>
         </Toolbar>

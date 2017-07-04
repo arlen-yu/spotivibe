@@ -12,19 +12,25 @@ class VisualizeContainer extends Component {
     this.state = {
       artistImg: '',
       artistPop: null,
+      danceability: 0.5,
       data: [],
+      energy: 0.5,
       error: false,
       menu: false,
       officialName: '',
       type: 'albums',
       uri: '',
+      allArtists: [],
+      allSongs: [],
       playlistSongs: [],
     };
     this.fetchData = this.fetchData.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onChange = this.onChange.bind(this);
     this.handleAddArtist = this.handleAddArtist.bind(this);
+    this.handleChangePlaylistSongs = this.handleChangePlaylistSongs.bind(this);
     this.handleMenuToggle = this.handleMenuToggle.bind(this);
+    this.handleSliderChange = this.handleSliderChange.bind(this);
   }
 
   componentDidMount() {
@@ -60,6 +66,7 @@ class VisualizeContainer extends Component {
       data: [],
       error: false,
       type: 'albums',
+      officialName: '',
     });
   }
 
@@ -101,9 +108,34 @@ class VisualizeContainer extends Component {
   }
 
   handleAddArtist() {
-    let allSongData = [];
-    this.state.data.map(el => (allSongData = [...allSongData, ...el.data.data]));
-    this.setState({ playlistSongs: allSongData });
+    if (!this.state.allArtists.includes(this.state.officialName)) {
+      let allSongData = [];
+      this.state.data.map(el => (allSongData = [...allSongData, ...el.data.data]));
+      const allSongs = [...this.state.allSongs, ...allSongData];
+      this.handleChangePlaylistSongs(allSongs);
+      this.setState({ allArtists: [...this.state.allArtists, this.state.officialName] });
+    }
+  }
+
+  handleChangePlaylistSongs(allSongs) {
+    let playlistSongs = [];
+    allSongs.map((el) => {
+      if (Math.abs(el.energy - this.state.energy) <= 0.1
+        && Math.abs(el.danceability - this.state.danceability) <= 0.1) {
+        playlistSongs = [...playlistSongs, el];
+      }
+      return el;
+    });
+    this.setState({ allSongs, playlistSongs });
+  }
+
+  handleSliderChange(value, type) {
+    if (type === 'danceability') {
+      this.setState({ danceability: value });
+    } else {
+      this.setState({ energy: value });
+    }
+    this.handleChangePlaylistSongs(this.state.allSongs);
   }
 
   render() {
@@ -115,7 +147,9 @@ class VisualizeContainer extends Component {
     const {
       artistImg,
       artistPop,
+      danceability,
       data,
+      energy,
       error,
       menu,
       officialName,
@@ -133,8 +167,11 @@ class VisualizeContainer extends Component {
             menu={menu}
             handleAddArtist={this.handleAddArtist}
             handleMenuToggle={this.handleMenuToggle}
+            energy={energy}
+            danceability={danceability}
             name={officialName}
             playlistSongs={playlistSongs}
+            handleSliderChange={this.handleSliderChange}
           />
           <div style={{ paddingTop: 50 }}>
             <Homepage
