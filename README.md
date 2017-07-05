@@ -1,8 +1,8 @@
 ## TODO:
 - Add dynamic suggestions as user is typing ✓
-- Autogenerate playlists
+- Autogenerate playlists ✓
 - Add favicon
-- Implement top 100 view
+- Implement top 100 view ✓
 - Workaround for spotify api rate limiting (cache?)
   - Only fetched artist info on submit, not on change ✓
 

@@ -166,20 +166,19 @@ class VisualizeContainer extends Component {
           <Drawer
             menu={menu}
             handleAddArtist={this.handleAddArtist}
-            handleMenuToggle={this.handleMenuToggle}
             energy={energy}
             danceability={danceability}
             name={officialName}
             playlistSongs={playlistSongs}
             handleSliderChange={this.handleSliderChange}
           />
-          <div style={{ paddingTop: 50 }}>
+          <div style={{ paddingTop: 50 }} className={classnames('app-content', { expanded: menu })}>
             <Homepage
               artistName={artistName}
               landing={false}
               onToggleMenu={this.handleMenuToggle}
             />
-            <div className={classnames('app-content', { expanded: menu })}>
+            <div>
               {location.pathname === '/'
                 ? <Billboard onClick={this.onClick} />
                 : null}

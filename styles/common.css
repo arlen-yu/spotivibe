@@ -39,7 +39,7 @@ body {
 }
 
 :global .app-content.expanded{
-  padding-left: 255px;
+  padding-left: 300px;
   transition: padding-left ease-in 0.1s;
 }
 
