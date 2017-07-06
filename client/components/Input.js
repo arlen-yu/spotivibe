@@ -75,13 +75,15 @@ class Input extends Component {
       background: 'transparent',
       border: 'none',
       borderBottom: `2px solid ${this.state.focus ? '#1ED760' : '#FAFAFA'}`,
-      width: '600px',
-      height: '26px',
-      fontSize: '20px',
+      width: this.props.landing ? 1000 : 600,
+      height: this.props.landing ? 45 : 26,
+      fontSize: this.props.landing ? 40 : 24,
       color: 'black',
       outline: 'none',
       padding: '0px 0px 0px 0px',
       fontStyle: 'italic',
+      transition: 'width 0.3s ease height 0.3s ease fontSize 0.3s ease',
+      '-webkit-transition': 'width 0.3s ease height 0.3s ease fontSize 0.3s ease',
     };
     const {
       artistName,
@@ -121,6 +123,7 @@ class Input extends Component {
 Input.propTypes = {
   artistName: PropTypes.string.isRequired,
   dataSource: PropTypes.any.isRequired,
+  landing: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

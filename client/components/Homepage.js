@@ -13,18 +13,14 @@ function getStyles(props) {
       textAlign: 'center',
       padding: 20,
       paddingTop: props.landing ? 100 : -50,
-      '-webkit-transition': 'all 0.3s ease',
-      '-moz-transition': 'all 0.3s ease',
-      '-o-transition': 'all 0.3s ease',
-      '-ms-transition': 'all 0.3s ease',
+      transition: 'padding-top 0.3s ease',
+      '-webkit-transition': 'padding-top 0.3s ease',
     },
     header: {
       fontSize: props.landing ? 80 : 48,
-      color: 'black',
-      '-webkit-transition': 'all 0.3s ease',
-      '-moz-transition': 'all 0.3s ease',
-      '-o-transition': 'all 0.3s ease',
-      '-ms-transition': 'all 0.3s ease',
+      color: '#FAFAFA',
+      transition: 'font-size 0.3s ease',
+      '-webkit-transition': 'font-size 0.3s ease',
     },
   };
 }
@@ -46,14 +42,13 @@ const Homepage = (props) => {
     <div>
       <AppBar
         style={{
-          backgroundColor: '#FAFAFA',
+          backgroundColor: '#4f4f4f',
           width: '100%',
           padding: 0,
-          margin: 0,
         }}
         title="Find your tempo with spotivibe."
-        iconElementLeft={<IconButton onTouchTap={onToggleMenu}>
-          <MenuIcon color={'black'} style={{ height: 40, width: 40 }} />
+        iconElementLeft={<IconButton onTouchTap={onToggleMenu} style={{ marginLeft: 30 }}>
+          <MenuIcon color={'#FAFAFA'} style={{ height: 40, width: 40 }} />
         </IconButton>}
       />
       <div style={styles.container}>
@@ -61,11 +56,7 @@ const Homepage = (props) => {
           role="presentation"
           style={{
             textDecoration: 'none',
-            fontSize: '24px',
-            fontFamily: 'Karla',
-            color: '#FAFAFA',
-            paddingLeft: 30,
-            paddingRight: 30,
+            color: '#4f4f4f',
           }}
           onClick={handleHeaderClick}
         >
@@ -77,6 +68,7 @@ const Homepage = (props) => {
           dataSource={dataSource}
           onChange={onChangeArtist}
           onSelect={onSelectArtist}
+          landing={landing}
           open={open}
         />
       </div>
