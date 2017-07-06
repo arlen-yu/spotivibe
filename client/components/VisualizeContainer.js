@@ -12,22 +12,30 @@ class VisualizeContainer extends Component {
     this.state = {
       artistImg: '',
       artistPop: null,
+      artistData: [],
+      artistsData: [],
       danceability: 0.5,
       data: [],
       energy: 0.5,
       error: false,
       menu: false,
+      inputMenu: false,
       officialName: '',
+      activeName: '',
       type: 'albums',
       uri: '',
+      landing: true,
       allArtists: [],
       allSongs: [],
       playlistSongs: [],
     };
-    this.fetchData = this.fetchData.bind(this);
+    this.fetchArtistData = this.fetchArtistData.bind(this);
+    this.fetchArtistSearch = this.fetchArtistSearch.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.handleAddArtist = this.handleAddArtist.bind(this);
+    this.handleHeaderClick = this.handleHeaderClick.bind(this);
     this.handleChangePlaylistSongs = this.handleChangePlaylistSongs.bind(this);
     this.handleMenuToggle = this.handleMenuToggle.bind(this);
     this.handleSliderChange = this.handleSliderChange.bind(this);
@@ -35,17 +43,9 @@ class VisualizeContainer extends Component {
 
   componentDidMount() {
     if (this.props.location.pathname !== '/') {
-      this.fetchData(this.props.location.state.artistData);
+      this.fetchArtistData(this.state.artistData);
     } else {
       this.resetState();
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.resetState();
-    if (nextProps.match.params.artistName !== this.props.match.params.artistName
-          && nextProps.location.pathname !== '/') {
-      this.fetchData(nextProps.location.state.artistData);
     }
   }
 
@@ -60,6 +60,14 @@ class VisualizeContainer extends Component {
     });
   }
 
+  onSubmit(artistData) {
+    if (artistData !== this.state.artistData) {
+      this.resetState();
+      this.setState({ artistData, inputMenu: false });
+      this.fetchArtistData(artistData);
+    }
+  }
+
   resetState() {
     this.setState({
       albumInfo: [],
@@ -67,16 +75,16 @@ class VisualizeContainer extends Component {
       error: false,
       type: 'albums',
       officialName: '',
+      inputMenu: false,
     });
   }
 
-  fetchData(artistData) {
+  fetchArtistData(artistData) {
     if (artistData && artistData.id) {
       this.setState({
         officialName: artistData.name,
         artistImg: artistData.images.length > 0 ? artistData.images[0].url : '',
         artistPop: artistData.popularity,
-        loading: true,
       });
       fetch(`/albums/${artistData.id}`)
         .then(res => res.json())
@@ -94,13 +102,23 @@ class VisualizeContainer extends Component {
                 .then((featureData) => {
                   const newData = this.state.data;
                   newData.push({ albumName: album.name, data: featureData });
-                  this.setState({ data: newData });
+                  this.setState({ data: newData, landing: false });
                 }));
           }
         });
     } else {
       this.setState({ error: true });
     }
+  }
+
+  fetchArtistSearch() {
+    fetch(`/artist/id/${this.state.activeName}`)
+      .then(res => res.json())
+      .then((res) => {
+        if (res.data !== null) {
+          this.setState({ artistsData: res.data, inputMenu: true });
+        }
+      });
   }
 
   handleMenuToggle() {
@@ -138,6 +156,11 @@ class VisualizeContainer extends Component {
     this.handleChangePlaylistSongs(this.state.allSongs);
   }
 
+  handleHeaderClick() {
+    this.resetState();
+    this.setState({ landing: true });
+  }
+
   render() {
     const {
       match,
@@ -147,9 +170,12 @@ class VisualizeContainer extends Component {
     const {
       artistImg,
       artistPop,
+      artistsData,
       danceability,
       data,
+      inputMenu,
       energy,
+      landing,
       error,
       menu,
       officialName,
@@ -159,7 +185,7 @@ class VisualizeContainer extends Component {
     } = this.state;
 
     const artistName = location.pathname === '/' ? '' : match.params.artistName;
-
+    const activeName = artistName || this.state.activeName;
     return (
       <div style={{ position: 'relative' }}>
         <div style={{ paddingBottom: '120px' }}>
@@ -172,14 +198,21 @@ class VisualizeContainer extends Component {
             playlistSongs={playlistSongs}
             handleSliderChange={this.handleSliderChange}
           />
-          <div style={{ paddingTop: 50 }} className={classnames('app-content', { expanded: menu })}>
+          <div className={classnames('app-content', { expanded: menu })}>
             <Homepage
-              artistName={artistName}
-              landing={false}
+              artistName={activeName}
+              dataSource={artistsData}
+              landing={landing}
+              open={inputMenu}
+              onChangeArtist={val => this.setState({ activeName: val })}
+              onSelectArtist={this.onSubmit}
+              onSubmit={this.fetchArtistSearch}
               onToggleMenu={this.handleMenuToggle}
+              pathname={location.pathname}
+              handleHeaderClick={this.handleHeaderClick}
             />
             <div>
-              {location.pathname === '/'
+              {landing
                 ? <Billboard onClick={this.onClick} />
                 : null}
               {!error && data.length

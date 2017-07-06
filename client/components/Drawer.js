@@ -11,7 +11,7 @@ const PlaylistFrame = (props) => {
       return el.id;
     }
     return '';
-  }).join(',');
+  }).filter(el => el !== '').join(',');
   return (
     <iframe title="spotify-playlist" src={baseUrl + songs} height="375px" />
   );

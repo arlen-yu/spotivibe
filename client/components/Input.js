@@ -42,19 +42,10 @@ class Input extends Component {
     super(props);
 
     this.state = {
-      artistName: this.props.artistName || '',
-      dataSource: [],
       focus: false,
-      open: false,
     };
 
-    this.handleUpdateInput = this.handleUpdateInput.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ artistName: nextProps.artistName || '' });
   }
 
   onFocus(event) {
@@ -69,31 +60,15 @@ class Input extends Component {
 
   onKeyPress(event) {
     if (event.key === 'Enter') {
-      this.handleUpdateInput();
+      this.props.onSubmit();
     }
   }
 
   onChange(event) {
     const value = event.target.value;
-    this.setState({ artistName: value });
+    this.props.onChange(value);
   }
 
-  handleSubmit(item) {
-    this.props.onSubmit(item);
-  }
-
-  handleUpdateInput() {
-    fetch(`/artist/id/${this.state.artistName}`)
-      .then(res => res.json())
-      .then((res) => {
-        if (res.data !== null) {
-          this.setState({
-            dataSource: res.data,
-            open: true,
-          });
-        }
-      });
-  }
 
   render() {
     const inputStyle = {
@@ -103,25 +78,24 @@ class Input extends Component {
       width: '600px',
       height: '26px',
       fontSize: '20px',
-      color: '#FAFAFA',
+      color: 'black',
       outline: 'none',
       padding: '0px 0px 0px 0px',
       fontStyle: 'italic',
     };
-
     const {
       artistName,
       dataSource,
-      focus, // eslint-disable-line no-unused-vars
-      open, // eslint-disable-line no-unused-vars
-    } = this.state;
+      onSelect,
+      open,
+    } = this.props;
 
     return (
       <div style={{ paddingLeft: 100 }}>
         <Autocomplete
           getItemValue={item => item.name}
           onSelect={(value, item) => {
-            this.handleSubmit(item);
+            onSelect(item);
           }}
           inputProps={{
             style: inputStyle,
@@ -131,7 +105,7 @@ class Input extends Component {
             placeholder: 'Enter an artist...',
           }}
           autoHighlight
-          open={this.state.open}
+          open={open}
           items={dataSource}
           value={artistName}
           onChange={this.onChange}
@@ -146,7 +120,11 @@ class Input extends Component {
 
 Input.propTypes = {
   artistName: PropTypes.string.isRequired,
+  dataSource: PropTypes.any.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  open: PropTypes.bool,
 };
 
 export default Input;

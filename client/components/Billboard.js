@@ -20,15 +20,12 @@ class Billboard extends Component {
     super(props);
     this.state = {
       trackData: null,
+      mounted: false,
     };
     this.fetchData = this.fetchData.bind(this);
   }
 
   componentDidMount() {
-    this.fetchData();
-  }
-
-  componentWillReceiveProps() {
     this.fetchData();
   }
 
