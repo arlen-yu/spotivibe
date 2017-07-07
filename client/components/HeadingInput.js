@@ -1,23 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import IconButton from 'material-ui/IconButton';
 import AppBar from 'material-ui/AppBar';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import Input from './Input';
 
-function getStyles(props) {
+function getStyles() {
   return {
     container: {
       width: '80%',
       margin: 'auto',
       textAlign: 'center',
       padding: 20,
-      paddingTop: props.landing ? 100 : -50,
+      paddingTop: -50,
       transition: 'padding-top 0.3s ease',
       '-webkit-transition': 'padding-top 0.3s ease',
     },
     header: {
-      fontSize: props.landing ? 80 : 48,
+      fontSize: 48,
       color: '#FAFAFA',
       transition: 'font-size 0.3s ease',
       '-webkit-transition': 'font-size 0.3s ease',
@@ -25,12 +26,10 @@ function getStyles(props) {
   };
 }
 
-const Homepage = (props) => {
+const HeadingInput = (props) => {
   const {
     artistName,
     dataSource,
-    handleHeaderClick,
-    landing, // eslint-disable-line no-unused-vars
     onChangeArtist,
     onSelectArtist,
     onSubmit,
@@ -52,23 +51,25 @@ const Homepage = (props) => {
         </IconButton>}
       />
       <div style={styles.container}>
-        <div
-          role="presentation"
+        <Link
+          to="/"
           style={{
             textDecoration: 'none',
-            color: '#4f4f4f',
+            fontSize: '24px',
+            fontFamily: 'Karla',
+            color: '#FAFAFA',
+            paddingLeft: 30,
+            paddingRight: 30,
           }}
-          onClick={handleHeaderClick}
         >
           <p style={styles.header}>SPOTIVIBE</p>
-        </div>
+        </Link>
         <Input
           onSubmit={onSubmit}
           artistName={artistName}
           dataSource={dataSource}
           onChange={onChangeArtist}
           onSelect={onSelectArtist}
-          landing={landing}
           open={open}
         />
       </div>
@@ -76,22 +77,20 @@ const Homepage = (props) => {
   );
 };
 
-Homepage.propTypes = {
+HeadingInput.propTypes = {
   artistName: PropTypes.string,
   dataSource: PropTypes.any,
-  landing: PropTypes.bool.isRequired,
   onToggleMenu: PropTypes.func.isRequired,
   onChangeArtist: PropTypes.func.isRequired,
   open: PropTypes.bool,
   onSelectArtist: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  handleHeaderClick: PropTypes.func.isRequired,
 };
 
-Homepage.defaultProps = {
+HeadingInput.defaultProps = {
   artistName: '',
   open: false,
   dataSource: [],
 };
 
-export default Homepage;
+export default HeadingInput;

@@ -38,7 +38,7 @@ class Billboard extends Component {
   }
 
   render() {
-    const { onClick } = this.props;
+    const { onTooltipHover } = this.props;
     return (
       <div>
         <p style={styles.headerStyle}>Find your tempo.</p>
@@ -49,7 +49,12 @@ class Billboard extends Component {
         {this.state.trackData
           ? <div style={{ width: 550, margin: 'auto', textAlign: 'center' }}>
             <p style={{ fontSize: 28 }}>Billboard Top 100</p>
-            <Graph data={this.state.trackData} width={550} height={550} onClick={onClick} />
+            <Graph
+              data={this.state.trackData}
+              width={550}
+              height={550}
+              onClick={onTooltipHover}
+            />
           </div>
           : <div style={{ width: 80, margin: 'auto', marginTop: '200px', textAlign: 'center' }}>
             <p>Loading... </p>
@@ -65,7 +70,7 @@ class Billboard extends Component {
 }
 
 Billboard.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onTooltipHover: PropTypes.func.isRequired,
 };
 
 export default Billboard;

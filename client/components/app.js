@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import VisualizeContainer from './VisualizeContainer';
+import Page from './Page';
 
 injectTapEventPlugin();
 
@@ -17,8 +17,8 @@ const App = () => (
   <div>
     <MuiThemeProvider muiTheme={muiTheme}>
       <Switch>
-        <Route exact path="/" component={VisualizeContainer} />
-        <Route path="/visualize/:artistName" component={VisualizeContainer} />
+        <Route exact path="/" component={Page} />
+        <Route path="/visualize/:artistName" component={Page} />
       </Switch>
     </MuiThemeProvider>
   </div>
