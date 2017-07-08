@@ -3,25 +3,36 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import IconButton from 'material-ui/IconButton';
 import AppBar from 'material-ui/AppBar';
+import { Animate } from 'react-move';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import Input from './Input';
+import { black, lightGreen, darkGrey } from '../../assets/colors';
 
-function getStyles() {
+function getStyles(pathname) {
   return {
     container: {
       width: '80%',
       margin: 'auto',
       textAlign: 'center',
       padding: 20,
-      paddingTop: -50,
-      transition: 'padding-top 0.3s ease',
-      '-webkit-transition': 'padding-top 0.3s ease',
+      paddingTop: pathname === '/' ? 50 : -100,
     },
     header: {
-      fontSize: 48,
-      color: '#FAFAFA',
-      transition: 'font-size 0.3s ease',
-      '-webkit-transition': 'font-size 0.3s ease',
+      fontSize: pathname === '/' ? 60 : 0,
+      fontWeight: 600,
+      color: darkGrey,
+      opacity: pathname === '/' ? 0.9 : 0,
+    },
+    inputStyles: {
+      background: 'transparent',
+      border: 'none',
+      width: pathname === '/' ? 900 : 600,
+      height: pathname === '/' ? 50 : 26,
+      fontSize: pathname === '/' ? 48 : 24,
+      color: 'black',
+      outline: 'none',
+      fontWeight: 400,
+      padding: '0px 0px 0px 0px',
     },
   };
 }
@@ -34,44 +45,56 @@ const HeadingInput = (props) => {
     onSelectArtist,
     onSubmit,
     open,
+    pathname,
     onToggleMenu,
   } = props;
-  const styles = getStyles(props);
+  const styles = getStyles(pathname);
   return (
     <div>
       <AppBar
         style={{
-          backgroundColor: '#4f4f4f',
+          backgroundColor: black,
           width: '100%',
           padding: 0,
         }}
-        title="Find your tempo with spotivibe."
-        iconElementLeft={<IconButton onTouchTap={onToggleMenu} style={{ marginLeft: 30 }}>
-          <MenuIcon color={'#FAFAFA'} style={{ height: 40, width: 40 }} />
-        </IconButton>}
-      />
-      <div style={styles.container}>
-        <Link
+        title={<Link
           to="/"
           style={{
             textDecoration: 'none',
             fontSize: '24px',
-            fontFamily: 'Karla',
-            color: '#FAFAFA',
+            fontFamily: 'San Francisco',
+            fontWeight: 500,
             paddingLeft: 30,
             paddingRight: 30,
+            color: lightGreen,
           }}
         >
-          <p style={styles.header}>SPOTIVIBE</p>
-        </Link>
-        <Input
-          onSubmit={onSubmit}
-          artistName={artistName}
-          dataSource={dataSource}
-          onChange={onChangeArtist}
-          onSelect={onSelectArtist}
-          open={open}
-        />
+          spotivibe
+        </Link>}
+        iconElementLeft={<IconButton onTouchTap={onToggleMenu} style={{ marginLeft: 30 }}>
+          <MenuIcon color={lightGreen} style={{ height: 40, width: 40 }} />
+        </IconButton>}
+      />
+      <div>
+        <Animate
+          data={styles}
+          duration={250}
+        >
+          {data => (
+            <div style={data.container}>
+              <p style={data.header}>Find your vibe.</p>
+              <Input
+                onSubmit={onSubmit}
+                artistName={artistName}
+                dataSource={dataSource}
+                onChange={onChangeArtist}
+                onSelect={onSelectArtist}
+                open={open}
+                inputStyles={data.inputStyles}
+              />
+            </div>
+          )}
+        </Animate>
       </div>
     </div>
   );
@@ -85,6 +108,7 @@ HeadingInput.propTypes = {
   open: PropTypes.bool,
   onSelectArtist: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  pathname: PropTypes.string.isRequired,
 };
 
 HeadingInput.defaultProps = {

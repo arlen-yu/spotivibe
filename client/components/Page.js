@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import { Animate } from 'react-move';
 import HeadingInput from './HeadingInput';
 import Drawer from './Drawer';
 import VisualizeContainer from './VisualizeContainer';
@@ -70,7 +70,10 @@ class Page extends Component {
       this.state.featureData.map(el => (allSongData = [...allSongData, ...el.data.data]));
       const allSongs = [...this.state.allSongs, ...allSongData];
       this.handleChangePlaylistSongs(allSongs);
-      this.setState({ allArtists: [...this.state.allArtists, this.state.artist] });
+      this.setState({
+        allArtists: [...this.state.allArtists, this.state.artist],
+        drawerOpen: true,
+      });
     }
   }
 
@@ -97,6 +100,17 @@ class Page extends Component {
 
 
   render() {
+    const d = {
+      closed: {
+        margin: '0 0 0 0',
+        paddingLeft: 0,
+        paddingRight: '20px !important',
+      },
+      open: {
+        paddingLeft: 300,
+      },
+    };
+
     const {
       artist,
       artistData,
@@ -111,59 +125,60 @@ class Page extends Component {
     } = this.state;
 
     const {
-      match,
       location,
     } = this.props;
-
-    const artistName = location.pathname === '/' ? '' : match.params.artistName;
 
     return (
       <div>
         <Drawer
           menu={drawerOpen}
-          handleAddArtist={this.handleAddArtist}
           energy={energy}
           danceability={danceability}
-          name={artistName}
           playlistSongs={activeSongs}
           handleSliderChange={this.handleSliderChange}
         />
-        <div className={classnames('app-content', { expanded: drawerOpen })}>
-          <HeadingInput
-            artistName={artist}
-            dataSource={artistsData}
-            open={inputMenuOpen}
-            onChangeArtist={val => this.setState({ artist: val })}
-            onSelectArtist={this.onSelectArtist}
-            onSubmit={this.fetchArtistSearch}
-            onToggleMenu={() => { this.setState({ drawerOpen: !drawerOpen }); }}
-            pathname={location.pathname}
-            handleHeaderClick={() => { this.setState({ artistData: false }); }}
-          />
-          <VisualizeContainer
-            artistData={artistData}
-            onTooltipHover={u => this.setState({ uri: u })}
-            data={this.state.featureData}
-            updateData={newData => this.setState({ featureData: newData })}
-            redirect={redirect}
-          />
-          <iframe
-            title="spotify-widgit"
-            src={uri}
-            style={{ position: 'fixed', bottom: 20, right: 20 }}
-            width="250"
-            height="80"
-            frameBorder="0"
-            allowTransparency="true"
-          />
-        </div>
+        <Animate
+          data={drawerOpen ? d.open : d.closed}
+          duration={250}
+        >
+          {data => (<div style={data}>
+            <HeadingInput
+              artistName={artist}
+              dataSource={artistsData}
+              open={inputMenuOpen}
+              onChangeArtist={val => this.setState({ artist: val })}
+              onSelectArtist={this.onSelectArtist}
+              onSubmit={this.fetchArtistSearch}
+              onToggleMenu={() => { this.setState({ drawerOpen: !drawerOpen }); }}
+              pathname={location.pathname}
+              handleHeaderClick={() => { this.setState({ artistData: false }); }}
+            />
+            <VisualizeContainer
+              artistData={artistData}
+              onTooltipHover={u => this.setState({ uri: u })}
+              data={this.state.featureData}
+              updateData={newData => this.setState({ featureData: newData })}
+              redirect={redirect}
+              handleAddArtist={this.handleAddArtist}
+              pathname={location.pathname}
+            />
+            <iframe
+              title="spotify-widgit"
+              src={uri}
+              style={{ position: 'fixed', bottom: 20, right: 20 }}
+              width="250"
+              height="80"
+              frameBorder="0"
+              allowTransparency="true"
+            />
+          </div>)}
+        </Animate>
       </div>
     );
   }
 }
 
 Page.propTypes = {
-  match: PropTypes.any.isRequired,
   location: PropTypes.any.isRequired,
 };
 

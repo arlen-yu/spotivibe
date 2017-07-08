@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'material-ui/Slider';
 import Drawer from 'material-ui/Drawer';
-import RaisedButton from 'material-ui/RaisedButton';
 
 const PlaylistFrame = (props) => {
   const baseUrl = 'https://embed.spotify.com/?theme=white&uri=spotify:trackset:My Playlist:';
@@ -13,7 +12,13 @@ const PlaylistFrame = (props) => {
     return '';
   }).filter(el => el !== '').join(',');
   return (
-    <iframe title="spotify-playlist" src={baseUrl + songs} height="375px" />
+    <iframe
+      title="spotify-playlist"
+      src={baseUrl + songs}
+      height="380"
+      frameBorder="0"
+      allowTransparency="true"
+    />
   );
 };
 
@@ -37,12 +42,6 @@ const CustomDrawer = props => (
         onChange={(event, newValue) => props.handleSliderChange(newValue, 'energy')}
       />
     </div>
-    <RaisedButton
-      label={`Add ${props.name} to playlist`}
-      style={{ width: '100%' }}
-      onTouchTap={props.handleAddArtist}
-      disabled={props.name === ''}
-    />
     {props.playlistSongs.length !== 0
       ? <PlaylistFrame allTracks={props.playlistSongs} />
       : null}
@@ -53,8 +52,6 @@ CustomDrawer.propTypes = {
   energy: PropTypes.number.isRequired,
   danceability: PropTypes.number.isRequired,
   menu: PropTypes.bool.isRequired,
-  name: PropTypes.string.isRequired,
-  handleAddArtist: PropTypes.func.isRequired,
   handleSliderChange: PropTypes.func.isRequired,
   playlistSongs: PropTypes.arrayOf(PropTypes.any).isRequired,
 };

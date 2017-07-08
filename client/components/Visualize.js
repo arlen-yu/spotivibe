@@ -68,6 +68,7 @@ class Visualize extends Component {
       popularity,
       type,
       handleRadioButton,
+      handleAddArtist,
     } = this.props;
 
     return (
@@ -77,6 +78,7 @@ class Visualize extends Component {
           img={img}
           popularity={popularity}
           handleRadioButton={handleRadioButton}
+          handleAddArtist={handleAddArtist}
         />
         {type === 'albums' ? this.renderAlbumGraphs() : this.renderAllSongGraphs()}
       </div>
@@ -93,6 +95,7 @@ Visualize.propTypes = {
   popularity: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
   handleRadioButton: PropTypes.func.isRequired,
+  handleAddArtist: PropTypes.func.isRequired,
 };
 
 export default Visualize;

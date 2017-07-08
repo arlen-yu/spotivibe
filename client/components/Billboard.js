@@ -1,32 +1,22 @@
 import React, { Component } from 'react';
 import CircularProgress from 'material-ui/CircularProgress';
+import FlatButton from 'material-ui/FlatButton';
 import PropTypes from 'prop-types';
+import { lightGreen } from '../../assets/colors';
 import Graph from './Graph';
-
-const styles = {
-  headerStyle: {
-    fontSize: 42,
-    textAlign: 'center',
-  },
-  infoStyle: {
-    fontSize: 18,
-    width: '550px',
-    margin: 'auto',
-  },
-};
 
 class Billboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
       trackData: null,
-      mounted: false,
+      viewBillboard: false,
     };
     this.fetchData = this.fetchData.bind(this);
   }
 
-  componentDidMount() {
-    this.fetchData();
+  componentWillMount() {
+    this.setState({ viewBillboard: false });
   }
 
   fetchData() {
@@ -39,31 +29,46 @@ class Billboard extends Component {
 
   render() {
     const { onTooltipHover } = this.props;
+    let field;
+    if (this.state.trackData && this.state.viewBillboard) {
+      field = (<div style={{ width: 550, margin: 'auto', textAlign: 'center' }}>
+        <p style={{ fontSize: 28 }}>Billboard Top 100</p>
+        <Graph
+          data={this.state.trackData}
+          width={550}
+          height={550}
+          onClick={onTooltipHover}
+        />
+      </div>);
+    } else if (!this.state.viewBillboard) {
+      field = (<div style={{ width: 550, margin: 'auto', textAlign: 'center' }}>
+        <FlatButton
+          onTouchTap={() => {
+            this.setState({ viewBillboard: true });
+            this.fetchData();
+          }}
+          label="view billboard top 100"
+          style={{
+            borderRadius: '32px',
+            fontWeight: 600,
+            fontSize: 32,
+            backgroundColor: lightGreen,
+          }}
+        />
+      </div>);
+    } else {
+      field = (<div style={{ width: 80, margin: 'auto', marginTop: '200px', textAlign: 'center' }}>
+        <p>Loading... </p>
+        <CircularProgress
+          size={80}
+          thickness={5}
+          color="#212121"
+        />
+      </div>);
+    }
     return (
       <div>
-        <p style={styles.headerStyle}>Find your tempo.</p>
-        <p style={styles.infoStyle}>
-          Spotivibe is a way to visualize the danceability of your favourite tracks.
-          Type in a desired artist in the input bar above, or see the Billboard Top 100 below.
-        </p>
-        {this.state.trackData
-          ? <div style={{ width: 550, margin: 'auto', textAlign: 'center' }}>
-            <p style={{ fontSize: 28 }}>Billboard Top 100</p>
-            <Graph
-              data={this.state.trackData}
-              width={550}
-              height={550}
-              onClick={onTooltipHover}
-            />
-          </div>
-          : <div style={{ width: 80, margin: 'auto', marginTop: '200px', textAlign: 'center' }}>
-            <p>Loading... </p>
-            <CircularProgress
-              size={80}
-              thickness={5}
-              color="#212121"
-            />
-          </div>}
+        {field}
       </div>
     );
   }

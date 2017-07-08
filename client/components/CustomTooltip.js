@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 class CustomTooltip extends Component {
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.payload.length !== 0) {
+    if (nextProps && nextProps.payload.length !== 0 && nextProps.payload[0].payload.uri) {
       const uri = `https://open.spotify.com/embed?uri=${nextProps.payload[0].payload.uri}`;
       nextProps.onClick(uri);
     }
@@ -46,7 +46,7 @@ class CustomTooltip extends Component {
         </Paper>
       );
     }
-    return (<div>{'shit'}</div>);
+    return (<div>{'Error!'}</div>);
   }
 }
 

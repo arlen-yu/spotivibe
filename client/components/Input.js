@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import PropTypes from 'prop-types';
+import { lightGreen, darkGrey } from '../../assets/colors';
 
 const styles = {
   item: {
@@ -71,25 +72,12 @@ class Input extends Component {
 
 
   render() {
-    const inputStyle = {
-      background: 'transparent',
-      border: 'none',
-      borderBottom: `2px solid ${this.state.focus ? '#1ED760' : '#FAFAFA'}`,
-      width: 600,
-      height: 26,
-      fontSize: 24,
-      color: 'black',
-      outline: 'none',
-      padding: '0px 0px 0px 0px',
-      fontStyle: 'italic',
-      transition: 'width 0.3s ease height 0.3s ease fontSize 0.3s ease',
-      '-webkit-transition': 'width 0.3s ease height 0.3s ease fontSize 0.3s ease',
-    };
     const {
       artistName,
       dataSource,
       onSelect,
       open,
+      inputStyles,
     } = this.props;
 
     return (
@@ -100,7 +88,7 @@ class Input extends Component {
             onSelect(item);
           }}
           inputProps={{
-            style: inputStyle,
+            style: Object.assign(inputStyles, { borderBottom: `2px solid ${this.state.focus ? lightGreen : darkGrey}` }),
             onFocus: event => this.onFocus(event),
             onBlur: event => this.onBlur(event),
             onKeyPress: event => this.onKeyPress(event),
@@ -127,6 +115,11 @@ Input.propTypes = {
   onSelect: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   open: PropTypes.bool,
+  inputStyles: PropTypes.object,
+};
+
+Input.defaultProps = {
+  inputStyles: {},
 };
 
 export default Input;

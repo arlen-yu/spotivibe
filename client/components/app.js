@@ -4,12 +4,13 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Page from './Page';
+import { lightGreen } from '../../assets/colors';
 
 injectTapEventPlugin();
 
 const muiTheme = getMuiTheme({
   slider: {
-    selectionColor: '#1ED760',
+    selectionColor: lightGreen,
   },
 });
 

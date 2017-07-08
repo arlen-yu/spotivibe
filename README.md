@@ -9,3 +9,5 @@
 ## BUG TABLE
 - Input not appearing on redirect to the same artist ✓
 - Is billboard rendering when it's not supposed to ?
+- width is glitching (different zoom widths)
+- Add to playlist button margins are off

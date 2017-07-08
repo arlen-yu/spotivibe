@@ -99,7 +99,7 @@ class VisualizeContainer extends Component {
 
     return (
       <div>
-        {this.props.data.length > 0
+        {this.props.pathname !== '/'
           ? <Visualize
             data={this.props.data}
             name={officialName}
@@ -107,6 +107,7 @@ class VisualizeContainer extends Component {
             popularity={artistPop}
             onTooltipHover={this.props.onTooltipHover}
             handleRadioButton={this.handleRadioButton}
+            handleAddArtist={this.props.handleAddArtist}
             type={type}
           />
           : <Billboard
@@ -124,6 +125,8 @@ VisualizeContainer.propTypes = {
   data: PropTypes.arrayOf(PropTypes.any).isRequired,
   updateData: PropTypes.func.isRequired,
   redirect: PropTypes.bool.isRequired,
+  pathname: PropTypes.string.isRequired,
+  handleAddArtist: PropTypes.func.isRequired,
 };
 
 export default VisualizeContainer;
