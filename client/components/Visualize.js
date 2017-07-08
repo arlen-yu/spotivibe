@@ -17,7 +17,7 @@ class Visualize extends Component {
     return (
       <div style={{ width: 500, margin: 'auto' }}>
         <p style={{ width: 150, margin: 'auto', fontSize: 34, fontWeight: 'bold' }}>All songs</p>
-        <Graph data={allSongData} width={500} height={500} onClick={this.props.onClick} />
+        <Graph data={allSongData} width={500} height={500} onClick={this.props.onTooltipHover} />
       </div>
     );
   }
@@ -47,7 +47,12 @@ class Visualize extends Component {
             key={el.albumName}
           >
             <p style={style.header}>{el.albumName}</p>
-            <Graph data={el.data.data} width={250} height={250} onClick={this.props.onClick} />
+            <Graph
+              data={el.data.data}
+              width={250}
+              height={250}
+              onClick={this.props.onTooltipHover}
+            />
           </div>
         ))}
       </div>
@@ -58,11 +63,12 @@ class Visualize extends Component {
     const {
       name,
       data, // eslint-disable-line no-unused-vars
-      onClick, // eslint-disable-line no-unused-vars
+      onTooltipHover, // eslint-disable-line no-unused-vars
       img,
       popularity,
       type,
       handleRadioButton,
+      handleAddArtist,
     } = this.props;
 
     return (
@@ -72,6 +78,7 @@ class Visualize extends Component {
           img={img}
           popularity={popularity}
           handleRadioButton={handleRadioButton}
+          handleAddArtist={handleAddArtist}
         />
         {type === 'albums' ? this.renderAlbumGraphs() : this.renderAllSongGraphs()}
       </div>
@@ -83,11 +90,12 @@ Visualize.propTypes = {
   // Artist name
   name: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.any).isRequired,
-  onClick: PropTypes.func.isRequired,
+  onTooltipHover: PropTypes.func.isRequired,
   img: PropTypes.string.isRequired,
   popularity: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
   handleRadioButton: PropTypes.func.isRequired,
+  handleAddArtist: PropTypes.func.isRequired,
 };
 
 export default Visualize;

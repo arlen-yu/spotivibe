@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import { lightGreen } from '../../assets/colors';
 
 const styles = {
   imgWrapperStyle: {
@@ -36,7 +39,21 @@ class ArtistCard extends Component {
       img,
       popularity,
       handleRadioButton,
+      handleAddArtist,
     } = this.props;
+
+    const actionButton = (
+      <FloatingActionButton
+        mini
+        onTouchTap={handleAddArtist}
+        style={{
+          padding: 0,
+          marginLeft: 10,
+        }}
+      >
+        <ContentAdd color={lightGreen} style={{ marginTop: -3 }} />
+      </FloatingActionButton>
+    );
 
     return (
       <div style={{ margin: 'auto', width: '550px', padding: 30, paddingTop: 0, marginBottom: -60, zIndex: -1 }}>
@@ -44,7 +61,7 @@ class ArtistCard extends Component {
           <img alt="" src={img} style={{ width: 'auto', height: '100%' }} />
         </div>
         <div style={{ display: 'inline-block', position: 'relative', top: -80, padding: 30 }}>
-          <p style={styles.headerStyle}>{name}</p>
+          <p style={styles.headerStyle}>{name}{actionButton}</p>
           {popularity
             ? <p style={styles.popularityStyle}>{`Popularity: ${popularity}`}</p>
             : null}
@@ -78,6 +95,7 @@ ArtistCard.propTypes = {
   img: PropTypes.string,
   popularity: PropTypes.number,
   handleRadioButton: PropTypes.func.isRequired,
+  handleAddArtist: PropTypes.func.isRequired,
 };
 
 ArtistCard.defaultProps = {

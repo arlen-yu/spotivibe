@@ -2,6 +2,7 @@ import { ScatterChart, XAxis, YAxis, CartesianGrid, Scatter, Tooltip, Text } fro
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CustomTooltip from './CustomTooltip';
+import { lightGreen } from '../../assets/colors';
 
 const CustomLabel = (props) => {
   const x = props.viewBox.x
@@ -85,7 +86,7 @@ class Graph extends Component {
           cursor={{ strokeDasharray: '5 5' }}
         />
         <CartesianGrid strokeDasharray="1 1" />
-        <Scatter name="temp" data={data} fill="#1ED760" />
+        <Scatter name="temp" data={data} fill={lightGreen} />
       </ScatterChart>
     );
   }
