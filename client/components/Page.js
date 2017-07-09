@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Animate } from 'react-move';
+import MenuIcon from 'material-ui/svg-icons/navigation/menu';
+import AppBar from 'material-ui/AppBar';
+import IconButton from 'material-ui/IconButton';
+import { Link } from 'react-router-dom';
 import HeadingInput from './HeadingInput';
 import Drawer from './Drawer';
 import VisualizeContainer from './VisualizeContainer';
+import { black, lightGreen } from '../../assets/colors';
+
 
 class Page extends Component {
   constructor(props) {
@@ -142,6 +148,31 @@ class Page extends Component {
           duration={250}
         >
           {data => (<div style={data}>
+            <AppBar
+              style={{
+                backgroundColor: black,
+                width: '100%',
+                padding: 0,
+              }}
+              title={<Link
+                to="/"
+                style={{
+                  textDecoration: 'none',
+                  fontSize: '24px',
+                  fontFamily: 'San Francisco',
+                  fontWeight: 500,
+                  color: lightGreen,
+                }}
+              >
+                spotivibe
+              </Link>}
+              iconElementLeft={<IconButton
+                onTouchTap={() => { this.setState({ drawerOpen: !drawerOpen }); }}
+                style={{ marginLeft: 30 }}
+              >
+                <MenuIcon color={lightGreen} style={{ height: 40, width: 40 }} />
+              </IconButton>}
+            />
             <HeadingInput
               artistName={artist}
               dataSource={artistsData}
@@ -149,7 +180,6 @@ class Page extends Component {
               onChangeArtist={val => this.setState({ artist: val })}
               onSelectArtist={this.onSelectArtist}
               onSubmit={this.fetchArtistSearch}
-              onToggleMenu={() => { this.setState({ drawerOpen: !drawerOpen }); }}
               pathname={location.pathname}
               handleHeaderClick={() => { this.setState({ artistData: false }); }}
             />

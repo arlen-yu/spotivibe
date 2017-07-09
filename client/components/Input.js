@@ -5,26 +5,30 @@ import { lightGreen, darkGrey } from '../../assets/colors';
 
 const styles = {
   item: {
-    padding: '2px 6px',
     cursor: 'default',
+    textAlign: 'left',
+    padding: 5,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   highlightedItem: {
-    color: 'white',
-    background: 'hsl(200, 50%, 50%)',
-    padding: '2px 6px',
+    background: 'hsl(85, 63%, 70%)',
+    padding: 5,
+    paddingTop: 10,
+    paddingBottom: 10,
+    textAlign: 'left',
     cursor: 'default',
   },
   menu: {
+    overflow: 'auto',
+    maxHeight: '400',
+    fontSize: 16,
+    fontWeight: 600,
     borderRadius: '3px',
     boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
     background: 'rgba(255, 255, 255, 0.9)',
-    padding: '2px 0',
-    fontSize: '90%',
-    position: 'fixed',
-    overflow: 'auto',
-    maxHeight: '50%',
-    border: 'solid 1px #ccc',
-    zIndex: 99,
+    border: `2px solid ${lightGreen}`,
+    fontFamily: 'San Francisco',
   },
 };
 
@@ -70,7 +74,6 @@ class Input extends Component {
     this.props.onChange(value);
   }
 
-
   render() {
     const {
       artistName,
@@ -81,14 +84,14 @@ class Input extends Component {
     } = this.props;
 
     return (
-      <div style={{ paddingLeft: 100 }}>
+      <div style={{ width: '100%', height: 100 }}>
         <Autocomplete
           getItemValue={item => item.name}
           onSelect={(value, item) => {
             onSelect(item);
           }}
           inputProps={{
-            style: Object.assign(inputStyles, { borderBottom: `2px solid ${this.state.focus ? lightGreen : darkGrey}` }),
+            style: Object.assign(inputStyles, { borderBottom: `4px solid ${this.state.focus ? lightGreen : darkGrey}` }),
             onFocus: event => this.onFocus(event),
             onBlur: event => this.onBlur(event),
             onKeyPress: event => this.onKeyPress(event),
@@ -96,10 +99,10 @@ class Input extends Component {
           }}
           autoHighlight
           open={open}
-          items={dataSource}
+          items={dataSource.slice(0, 8)}
           value={artistName}
           onChange={this.onChange}
-          wrapperStyle={{ padding: 20 }}
+          wrapperStyle={{ position: 'absolute', zIndex: 99, paddingTop: 30 }}
           menuStyle={styles.menu}
           renderItem={renderItem}
         />

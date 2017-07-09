@@ -6,8 +6,16 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import { lightGreen } from '../../assets/colors';
 
 const styles = {
+  artistCardContainer: {
+    margin: 'auto',
+    width: '700px',
+    padding: 30,
+    paddingTop: 0,
+    marginBottom: -60,
+    zIndex: -1,
+  },
   imgWrapperStyle: {
-    display: 'inline-block',
+    float: 'left',
     position: 'relative',
     width: '150px',
     height: '150px',
@@ -15,14 +23,18 @@ const styles = {
     borderRadius: '50%',
   },
   headerStyle: {
-    verticalAlign: 'top',
     fontSize: 40,
-    width: 300,
+    maxWidth: 300,
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    float: 'left',
     fontWeight: 'bold',
   },
+  buttonStyle: {
+    float: 'left',
+  },
   popularityStyle: {
-    verticalAlign: 'top',
-    marginTop: -50,
     fontSize: 24,
     fontStyle: 'italic',
   },
@@ -37,39 +49,44 @@ class ArtistCard extends Component {
     const {
       name,
       img,
-      popularity,
       handleRadioButton,
       handleAddArtist,
+      type,
     } = this.props;
 
     const actionButton = (
       <FloatingActionButton
         mini
         onTouchTap={handleAddArtist}
+        iconStyle={{
+          fill: lightGreen,
+          color: lightGreen,
+        }}
         style={{
           padding: 0,
           marginLeft: 10,
         }}
+        zDepth={0}
       >
-        <ContentAdd color={lightGreen} style={{ marginTop: -3 }} />
+        <ContentAdd />
       </FloatingActionButton>
     );
 
     return (
-      <div style={{ margin: 'auto', width: '550px', padding: 30, paddingTop: 0, marginBottom: -60, zIndex: -1 }}>
+      <div style={styles.artistCardContainer}>
         <div style={styles.imgWrapperStyle}>
           <img alt="" src={img} style={{ width: 'auto', height: '100%' }} />
         </div>
-        <div style={{ display: 'inline-block', position: 'relative', top: -80, padding: 30 }}>
-          <p style={styles.headerStyle}>{name}{actionButton}</p>
-          {popularity
-            ? <p style={styles.popularityStyle}>{`Popularity: ${popularity}`}</p>
-            : null}
+        <div style={{ float: 'left', position: 'relative', padding: 30 }}>
+          <div>
+            <div style={styles.headerStyle}>{name}</div>
+            <div style={styles.buttonStyle}>{actionButton}</div>
+          </div>
           <RadioButtonGroup
             name="type"
-            defaultSelected="albums"
+            defaultSelected={type}
             onChange={handleRadioButton}
-            style={{ width: 300, fontFamily: 'inherit', marginTop: -20 }}
+            style={{ width: 300, fontFamily: 'inherit', marginTop: 0 }}
           >
             <RadioButton
               value="albums"
@@ -93,9 +110,9 @@ class ArtistCard extends Component {
 ArtistCard.propTypes = {
   name: PropTypes.string,
   img: PropTypes.string,
-  popularity: PropTypes.number,
   handleRadioButton: PropTypes.func.isRequired,
   handleAddArtist: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 ArtistCard.defaultProps = {

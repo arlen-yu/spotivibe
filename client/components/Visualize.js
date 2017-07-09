@@ -79,6 +79,7 @@ class Visualize extends Component {
           popularity={popularity}
           handleRadioButton={handleRadioButton}
           handleAddArtist={handleAddArtist}
+          type={type}
         />
         {type === 'albums' ? this.renderAlbumGraphs() : this.renderAllSongGraphs()}
       </div>
