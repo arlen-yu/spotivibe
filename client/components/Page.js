@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Animate } from 'react-move';
-import MenuIcon from 'material-ui/svg-icons/navigation/menu';
+// import LinearProgress from 'material-ui/LinearProgress';
+import ChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
+import ChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import { Link } from 'react-router-dom';
@@ -76,11 +78,9 @@ class Page extends Component {
       this.state.featureData.map(el => (allSongData = [...allSongData, ...el.data.data]));
       const allSongs = [...this.state.allSongs, ...allSongData];
       this.handleChangePlaylistSongs(allSongs);
-      this.setState({
-        allArtists: [...this.state.allArtists, this.state.artist],
-        drawerOpen: true,
-      });
+      this.setState({ allArtists: [...this.state.allArtists, this.state.artist] });
     }
+    this.setState({ drawerOpen: true });
   }
 
   handleSliderChange(value, type) {
@@ -168,9 +168,13 @@ class Page extends Component {
               </Link>}
               iconElementLeft={<IconButton
                 onTouchTap={() => { this.setState({ drawerOpen: !drawerOpen }); }}
-                style={{ marginLeft: 30 }}
+                style={{ marginLeft: 30, padding: 0 }}
+                iconStyle={{ height: 40, width: 40 }}
+                tooltip={drawerOpen ? 'Hide playlist' : 'Show playlist'}
               >
-                <MenuIcon color={lightGreen} style={{ height: 40, width: 40 }} />
+                {drawerOpen
+                  ? <ChevronLeft color={lightGreen} />
+                  : <ChevronRight color={lightGreen} />}
               </IconButton>}
             />
             <HeadingInput

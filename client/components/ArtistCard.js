@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
+import IconButton from 'material-ui/IconButton';
+import PlaylistAdd from 'material-ui/svg-icons/av/playlist-add';
 import { lightGreen } from '../../assets/colors';
 
 const styles = {
@@ -10,8 +10,6 @@ const styles = {
     margin: 'auto',
     width: '700px',
     padding: 30,
-    paddingTop: 0,
-    marginBottom: -60,
     zIndex: -1,
   },
   imgWrapperStyle: {
@@ -55,21 +53,20 @@ class ArtistCard extends Component {
     } = this.props;
 
     const actionButton = (
-      <FloatingActionButton
-        mini
+      <IconButton
         onTouchTap={handleAddArtist}
-        iconStyle={{
-          fill: lightGreen,
-          color: lightGreen,
-        }}
         style={{
           padding: 0,
           marginLeft: 10,
         }}
-        zDepth={0}
+        iconStyle={{
+          width: 40,
+          height: 40,
+        }}
+        tooltip={'Add to playlist'}
       >
-        <ContentAdd />
-      </FloatingActionButton>
+        <PlaylistAdd color={lightGreen} />
+      </IconButton>
     );
 
     return (
@@ -77,7 +74,7 @@ class ArtistCard extends Component {
         <div style={styles.imgWrapperStyle}>
           <img alt="" src={img} style={{ width: 'auto', height: '100%' }} />
         </div>
-        <div style={{ float: 'left', position: 'relative', padding: 30 }}>
+        <div style={{ float: 'left', position: 'relative', padding: 30, paddingBottom: 80 }}>
           <div>
             <div style={styles.headerStyle}>{name}</div>
             <div style={styles.buttonStyle}>{actionButton}</div>

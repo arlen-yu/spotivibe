@@ -7,27 +7,42 @@ import { darkGrey } from '../../assets/colors';
 function getStyles(pathname) {
   return {
     container: {
-      width: pathname === '/' ? 900 : 600,
+      width: pathname === '/' ? 700 : 600,
       margin: 'auto',
       textAlign: 'center',
-      paddingTop: pathname === '/' ? 50 : -100,
+      marginTop: pathname === '/' ? 0 : -250,
+    },
+    text: {
+      opacity: pathname === '/' ? 1 : 0,
+      padding: 40,
+      marginTop: pathname === '/' ? 40 : -250,
+      cursor: 'default',
     },
     header: {
-      fontSize: pathname === '/' ? 50 : 0,
+      fontSize: 60,
+      padding: 15,
       fontWeight: 600,
       color: darkGrey,
-      opacity: pathname === '/' ? 0.9 : 0,
+    },
+    subHeader: {
+      fontSize: 20,
+      fontWeight: 200,
     },
     inputStyles: {
       background: 'transparent',
       border: 'none',
-      width: pathname === '/' ? 880 : 580,
-      height: pathname === '/' ? 38 : 26,
-      fontSize: pathname === '/' ? 36 : 24,
-      color: 'black',
+      width: pathname === '/' ? 680 : 580,
+      height: pathname === '/' ? 34 : 22,
+      fontSize: pathname === '/' ? 32 : 20,
+      color: darkGrey,
       outline: 'none',
       fontWeight: 400,
       padding: '0px 0px 0px 0px',
+    },
+    wrapperStyle: {
+      position: 'absolute',
+      zIndex: 99,
+      top: pathname === '/' ? 300 : 100,
     },
   };
 }
@@ -44,27 +59,31 @@ const HeadingInput = (props) => {
   } = props;
   const styles = getStyles(pathname);
   return (
-    <div>
-      <Animate
-        data={styles}
-        duration={250}
-      >
-        {data => (
-          <div style={data.container}>
-            <p style={data.header}>Find your vibe.</p>
-            <Input
-              onSubmit={onSubmit}
-              artistName={artistName}
-              dataSource={dataSource}
-              onChange={onChangeArtist}
-              onSelect={onSelectArtist}
-              open={open}
-              inputStyles={data.inputStyles}
-            />
+    <Animate
+      data={styles}
+      duration={250}
+    >
+      {data => (
+        <div style={data.container}>
+          <div style={data.text}>
+            <div style={data.header}>Find your vibe.</div>
+            <div style={data.subHeader}>
+              Curate personalized playlists based on energy and danceability.
+            </div>
           </div>
-        )}
-      </Animate>
-    </div>
+          <Input
+            onSubmit={onSubmit}
+            artistName={artistName}
+            dataSource={dataSource}
+            onChange={onChangeArtist}
+            onSelect={onSelectArtist}
+            open={open}
+            inputStyles={data.inputStyles}
+            wrapperStyle={data.wrapperStyle}
+          />
+        </div>
+      )}
+    </Animate>
   );
 };
 

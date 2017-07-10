@@ -81,6 +81,7 @@ class Input extends Component {
       onSelect,
       open,
       inputStyles,
+      wrapperStyle,
     } = this.props;
 
     return (
@@ -96,13 +97,14 @@ class Input extends Component {
             onBlur: event => this.onBlur(event),
             onKeyPress: event => this.onKeyPress(event),
             placeholder: 'Enter an artist...',
+            spellCheck: false,
           }}
           autoHighlight
           open={open}
           items={dataSource.slice(0, 8)}
           value={artistName}
           onChange={this.onChange}
-          wrapperStyle={{ position: 'absolute', zIndex: 99, paddingTop: 30 }}
+          wrapperStyle={wrapperStyle}
           menuStyle={styles.menu}
           renderItem={renderItem}
         />
@@ -119,6 +121,7 @@ Input.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   open: PropTypes.bool,
   inputStyles: PropTypes.object,
+  wrapperStyle: PropTypes.object,
 };
 
 Input.defaultProps = {

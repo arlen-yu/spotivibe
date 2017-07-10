@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import LinearProgress from 'material-ui/LinearProgress';
 import Visualize from './Visualize';
 import Billboard from './Billboard';
 
@@ -12,6 +13,7 @@ class VisualizeContainer extends Component {
       artistImg: '',
       artistPop: 0,
       type: 'albums',
+      loading: false,
     };
     this.resetState = this.resetState.bind(this);
     this.handleRadioButton = this.handleRadioButton.bind(this);
@@ -85,6 +87,7 @@ class VisualizeContainer extends Component {
       artistImg,
       artistPop,
       type,
+      loading,
     } = this.state;
 
     if (this.props.redirect) {
@@ -99,6 +102,7 @@ class VisualizeContainer extends Component {
 
     return (
       <div>
+        {loading ? <LinearProgress style={{ position: 'absolute', top: 64 }} /> : null}
         {this.props.pathname !== '/'
           ? <Visualize
             data={this.props.data}
