@@ -65,7 +65,7 @@ class VisualizeContainer extends Component {
           return false;
         })
         .then((albumInfo) => {
-          if (albumInfo) {
+          if (albumInfo && albumInfo.length !== 0) {
             albumInfo.map(album =>
               fetch(`/visualize/feature/${album.id}`)
                 .then(res => res.json())
@@ -74,6 +74,8 @@ class VisualizeContainer extends Component {
                   newData.push({ albumName: album.name, data: featureData });
                   this.props.updateData(newData);
                 }));
+          } else {
+            this.props.updateData(false);
           }
         });
     } else {
@@ -117,6 +119,8 @@ class VisualizeContainer extends Component {
           : <Billboard
             onTooltipHover={this.props.onTooltipHover}
             handleRadioButton={this.handleRadioButton}
+            handleAddBillboard={this.props.handleAddBillboard}
+            data={this.props.billboardData}
           />}
       </div>
     );
@@ -125,12 +129,14 @@ class VisualizeContainer extends Component {
 
 VisualizeContainer.propTypes = {
   artistData: PropTypes.any.isRequired,
+  billboardData: PropTypes.arrayOf(PropTypes.any).isRequired,
   onTooltipHover: PropTypes.func.isRequired,
   data: PropTypes.arrayOf(PropTypes.any).isRequired,
   updateData: PropTypes.func.isRequired,
   redirect: PropTypes.bool.isRequired,
   pathname: PropTypes.string.isRequired,
   handleAddArtist: PropTypes.func.isRequired,
+  handleAddBillboard: PropTypes.func.isRequired,
 };
 
 export default VisualizeContainer;

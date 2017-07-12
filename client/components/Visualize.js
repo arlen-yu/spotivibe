@@ -14,6 +14,17 @@ class Visualize extends Component {
   renderAllSongGraphs() {
     let allSongData = [];
     this.props.data.map(el => (allSongData = [...allSongData, ...el.data.data]));
+    if (!this.props.data) {
+      return (<div style={{
+        fontWeight: 300,
+        fontSize: 28,
+        marginTop: 50,
+        clear: 'both',
+        width: 500,
+        margin: 'auto',
+      }}
+      >{'No albums to show - don\'t kill the vibe!'}</div>);
+    }
     return (
       <div style={{ width: 500, margin: 'auto' }}>
         <p style={{ width: 150, margin: 'auto', fontSize: 34, fontWeight: 'bold' }}>All songs</p>
@@ -39,6 +50,18 @@ class Visualize extends Component {
         whiteSpace: 'nowrap',
       },
     };
+    if (!this.props.data) {
+      return (<div style={{
+        fontWeight: 300,
+        fontSize: 28,
+        marginTop: 50,
+        clear: 'both',
+        width: 500,
+        margin: 'auto',
+      }}
+      >{'No albums to show - don\'t kill the vibe!'}</div>);
+    }
+
     return (
       <div style={{ display: 'inline-block', textAlign: 'center', width: '100%' }}>
         {this.props.data.map(el => (
@@ -90,7 +113,7 @@ class Visualize extends Component {
 Visualize.propTypes = {
   // Artist name
   name: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(PropTypes.any).isRequired,
+  data: PropTypes.oneOf(PropTypes.arrayOf(PropTypes.any), false).isRequired,
   onTooltipHover: PropTypes.func.isRequired,
   img: PropTypes.string.isRequired,
   popularity: PropTypes.number.isRequired,
