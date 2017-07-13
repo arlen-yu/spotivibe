@@ -8,7 +8,7 @@ import { lightGreen } from '../../assets/colors';
 const styles = {
   artistCardContainer: {
     margin: 'auto',
-    width: '700px',
+    maxWidth: '525px',
     padding: 30,
     zIndex: -1,
   },

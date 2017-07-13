@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Scroll from 'react-scroll';
 import CircularProgress from 'material-ui/CircularProgress';
 import IconButton from 'material-ui/IconButton';
 import PlaylistAdd from 'material-ui/svg-icons/av/playlist-add';
@@ -12,11 +13,18 @@ class Billboard extends Component {
     super(props);
     this.state = {
       viewBillboard: false,
+      scroll: true,
     };
   }
 
   componentWillMount() {
     this.setState({ viewBillboard: false });
+  }
+  componentWillUpdate() {
+    const scroll = Scroll.animateScroll;
+    if (this.state.scroll) {
+      scroll.scrollToBottom();
+    }
   }
 
   render() {
@@ -55,7 +63,7 @@ class Billboard extends Component {
       field = (<div style={{ width: 550, margin: 'auto', textAlign: 'center' }}>
         <FlatButton
           onTouchTap={() => {
-            this.setState({ viewBillboard: true });
+            this.setState({ viewBillboard: true, scroll: false });
           }}
           label="view billboard top 100"
           style={{

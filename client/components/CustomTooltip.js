@@ -14,21 +14,24 @@ class CustomTooltip extends Component {
     const styles = {
       name: {
         fontSize: 18,
-        padding: 0,
+        padding: 5,
         fontWeight: 'bold',
-        width: 170,
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
+        float: 'left',
+        width: '100%',
       },
       info: {
         fontSize: 14,
-        padding: 0,
+        padding: 5,
         fontStyle: 'italic',
+        float: 'left',
+        width: '100%',
       },
       paper: {
         height: 100,
-        width: 200,
+        width: 180,
       },
     };
 
@@ -40,9 +43,9 @@ class CustomTooltip extends Component {
     if (this.props && payload.length !== 0) {
       return (
         <Paper style={styles.paper} zDepth={2}>
-          <p style={styles.name}>{payload[0].payload.name}</p>
-          <p style={styles.info}>{`danceability: ${payload[0].value}`}</p>
-          <p style={styles.info}>{`energy: ${payload[1].value}`}</p>
+          <div style={styles.name}>{payload[0].payload.name}</div>
+          <div style={styles.info}>{`danceability: ${payload[0].value}`}</div>
+          <div style={styles.info}>{`energy: ${payload[1].value}`}</div>
         </Paper>
       );
     }
