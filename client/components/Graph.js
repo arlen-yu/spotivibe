@@ -1,7 +1,6 @@
 import { ScatterChart, XAxis, YAxis, CartesianGrid, Scatter, Tooltip, Text } from 'recharts';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Scroll from 'react-scroll';
 import CustomTooltip from './CustomTooltip';
 import { lightGreen } from '../../assets/colors';
 
@@ -38,9 +37,16 @@ CustomLabel.defaultProps = {
 };
 
 class Graph extends Component {
-  componentDidMount() {
-    const scroll = Scroll.animateScroll;
-    scroll.scrollToBottom();
+  shouldComponentUpdate(nextProps) {
+    if (this.props.data.length !== nextProps.data.length) {
+      return true;
+    }
+    for (let i = 0; i < this.props.data.length; i += 1) {
+      if (JSON.stringify(this.props.data[i]) !== JSON.stringify(nextProps.data[i])) {
+        return true;
+      }
+    }
+    return false;
   }
 
   render() {
@@ -53,37 +59,35 @@ class Graph extends Component {
     } = this.props;
 
     return (
-      <div ref={(node) => { this.graph = node; }}>
-        <ScatterChart
-          width={width || 300}
-          height={height || 300}
-          margin={{ top: 20, right: 20, bottom: 10, left: 10 }}
-        >
-          <XAxis
-            type="number"
-            dataKey="danceability"
-            name="danceability"
-            label={<CustomLabel fontSize={fontSize}>Danceability</CustomLabel>}
-          />
-          <YAxis
-            type="number"
-            dataKey="energy"
-            name="energy"
-            label={<CustomLabel angle={90} fontSize={fontSize}>Energy</CustomLabel>}
-          />
-          <Tooltip
-            content={
-              <CustomTooltip
-                onClick={onClick}
-                payload={data}
-              />
-            }
-            cursor={{ strokeDasharray: '5 5' }}
-          />
-          <CartesianGrid strokeDasharray="1 1" />
-          <Scatter name="temp" data={data} fill={lightGreen} />
-        </ScatterChart>
-      </div>
+      <ScatterChart
+        width={width || 300}
+        height={height || 300}
+        margin={{ top: 20, right: 20, bottom: 10, left: 10 }}
+      >
+        <XAxis
+          type="number"
+          dataKey="danceability"
+          name="danceability"
+          label={<CustomLabel fontSize={fontSize}>Danceability</CustomLabel>}
+        />
+        <YAxis
+          type="number"
+          dataKey="energy"
+          name="energy"
+          label={<CustomLabel angle={90} fontSize={fontSize}>Energy</CustomLabel>}
+        />
+        <Tooltip
+          content={
+            <CustomTooltip
+              onClick={onClick}
+              payload={data}
+            />
+          }
+          cursor={{ strokeDasharray: '5 5' }}
+        />
+        <CartesianGrid strokeDasharray="1 1" />
+        <Scatter name="temp" data={data} fill={lightGreen} />
+      </ScatterChart>
     );
   }
 }
