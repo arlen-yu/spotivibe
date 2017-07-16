@@ -68,6 +68,12 @@ function getAudioFeatures(trackInfo) {
           if (track.id === trackInfo[i].id) {
             const newTrack = track;
             newTrack.name = trackInfo[i].name;
+            if (trackInfo[i].artists) {
+              newTrack.artist = trackInfo[i].artists[0].name;
+            }
+            if (trackInfo[i].preview_url) {
+              newTrack.preview = trackInfo[i].preview_url;
+            }
             return newTrack;
           }
         }
@@ -87,7 +93,7 @@ function getPlaylistTracks(user, playlistId) {
 function getPlaylistData(user, playlistId) {
   return getPlaylistTracks(user, playlistId)
     .then(response => getAudioFeatures(response))
-    .then(features => features)
+    .then(features => features);
 }
 
 function getAlbumData(albumId) {

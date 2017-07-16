@@ -12,32 +12,6 @@ import Drawer from './Drawer';
 import VisualizeContainer from './VisualizeContainer';
 import { black, lightGreen } from '../../assets/colors';
 
-function isEquivalent(a, b) {
-  // Create arrays of property names
-  const aProps = Object.getOwnPropertyNames(a);
-  const bProps = Object.getOwnPropertyNames(b);
-
-  // If number of properties is different,
-  // objects are not equivalent
-  if (aProps.length !== bProps.length) {
-    return false;
-  }
-
-  for (let i = 0; i < aProps.length; i += 1) {
-    const propName = aProps[i];
-
-    // If values of same property are not equal,
-    // objects are not equivalent
-    if (a[propName] !== b[propName]) {
-      return false;
-    }
-  }
-
-  // If we made it this far, objects
-  // are considered equivalent
-  return true;
-}
-
 class Page extends Component {
   constructor(props) {
     super(props);
@@ -82,7 +56,7 @@ class Page extends Component {
   }
 
   onSelectArtist(artistData) {
-    this.setState({ artistData, inputMenuOpen: false, redirect: true });
+    this.setState({ artistData, inputMenuOpen: false, redirect: true, artist: artistData.name });
   }
 
   resetProps() {
@@ -118,7 +92,8 @@ class Page extends Component {
   handleAddArtist() {
     if (!this.state.allArtists.includes(this.state.artist)) {
       let allSongData = [];
-      this.state.featureData.map(el => (allSongData = [...allSongData, ...el.data.data]));
+      this.state.featureData.map(el => (allSongData = [...allSongData,
+        ...el.data.data.map(songInfo => Object.assign(songInfo, { artist: this.state.artist }))]));
       const allSongs = [...this.state.allSongs, ...allSongData];
       this.handleChangePlaylistSongs(allSongs);
       this.setState({ allArtists: [...this.state.allArtists, this.state.artist] });
