@@ -4,21 +4,27 @@ import Slider from 'material-ui/Slider';
 import Drawer from 'material-ui/Drawer';
 
 const PlaylistFrame = (props) => {
-  const baseUrl = 'https://embed.spotify.com/?theme=white&uri=spotify:trackset:My Playlist:';
+  const baseUrl = 'https://open.spotify.com/embed?uri=spotify:track:';
   const songs = props.allTracks.map((el) => {
     if (el) {
-      return el.id;
+      return (
+        <iframe
+          title="spotify-frame"
+          src={`${baseUrl + el.id}&theme=white`}
+          height="80"
+          width="280"
+          frameBorder="0"
+          allowTransparency="true"
+        />
+      );
     }
     return '';
-  }).filter(el => el !== '').join(',');
+  }).filter(el => el !== '');
+
   return (
-    <iframe
-      title="spotify-playlist"
-      src={baseUrl + songs}
-      height="380"
-      frameBorder="0"
-      allowTransparency="true"
-    />
+    <div style={{ height: 400, overflowY: 'scroll', overflowX: 'visible', padding: 8, width: 280, margin: 'auto' }}>
+      {songs}
+    </div>
   );
 };
 
@@ -44,7 +50,8 @@ const CustomDrawer = props => (
     </div>
     {props.playlistSongs.length !== 0
       ? <PlaylistFrame allTracks={props.playlistSongs} />
-      : null}
+      : <div style={{ fontSize: 26, padding: 10, width: 280, margin: 'auto' }}>
+        No songs! Move the sliders, or add more music!</div>}
   </Drawer>
 );
 

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Animate } from 'react-move';
 import Snackbar from 'material-ui/Snackbar';
 import ChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
+import Help from 'material-ui/svg-icons/action/help';
+import Dialog from 'material-ui/Dialog';
 import ChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
@@ -11,32 +13,6 @@ import HeadingInput from './HeadingInput';
 import Drawer from './Drawer';
 import VisualizeContainer from './VisualizeContainer';
 import { black, lightGreen } from '../../assets/colors';
-
-function isEquivalent(a, b) {
-  // Create arrays of property names
-  const aProps = Object.getOwnPropertyNames(a);
-  const bProps = Object.getOwnPropertyNames(b);
-
-  // If number of properties is different,
-  // objects are not equivalent
-  if (aProps.length !== bProps.length) {
-    return false;
-  }
-
-  for (let i = 0; i < aProps.length; i += 1) {
-    const propName = aProps[i];
-
-    // If values of same property are not equal,
-    // objects are not equivalent
-    if (a[propName] !== b[propName]) {
-      return false;
-    }
-  }
-
-  // If we made it this far, objects
-  // are considered equivalent
-  return true;
-}
 
 class Page extends Component {
   constructor(props) {
@@ -192,8 +168,21 @@ class Page extends Component {
       location,
     } = this.props;
 
+    const dialogText = `
+      Spotivibe is a clean, quick way of creating playlists based on energy and danceability.
+      Find your vibe by typing in an artist, or click below to see the current billboard 100.
+    `;
+
     return (
       <div>
+        <Dialog
+          title="How does this work?"
+          modal={false}
+          open={this.state.dialog}
+          onRequestClose={() => { this.setState({ dialog: false }); }}
+        >
+          {dialogText}
+        </Dialog>
         <Drawer
           menu={drawerOpen}
           energy={energy}
@@ -234,7 +223,15 @@ class Page extends Component {
                   ? <ChevronLeft color={lightGreen} />
                   : <ChevronRight color={lightGreen} />}
               </IconButton>}
-            />
+            >
+              <IconButton
+                onTouchTap={() => { this.setState({ dialog: true }); }}
+                iconStyle={{ color: lightGreen }}
+                style={{ paddingTop: 17 }}
+              >
+                <Help />
+              </IconButton>
+            </AppBar>
             <HeadingInput
               artistName={artist}
               dataSource={artistsData}

@@ -1,4 +1,6 @@
 ## TODO:
+- Let them log in to save (!)
+  - Spotify changed their api **again**... thnx.
 - Add dynamic suggestions as user is typing ✓
 - Autogenerate playlists ✓
 - Add favicon
