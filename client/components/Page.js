@@ -33,11 +33,14 @@ class Page extends Component {
       uri: '',
       redirect: false,
       artistError: false,
+      loadingPlaylist: false,
     };
     this.onSelectArtist = this.onSelectArtist.bind(this);
     this.resetProps = this.resetProps.bind(this);
     this.fetchArtistSearch = this.fetchArtistSearch.bind(this);
     this.handleSliderChange = this.handleSliderChange.bind(this);
+    this.handleSliderDragStop = this.handleSliderDragStop.bind(this);
+    this.handleSliderDragStart = this.handleSliderDragStart.bind(this);
     this.handleAddArtist = this.handleAddArtist.bind(this);
     this.handleAddBillboard = this.handleAddBillboard.bind(this);
     this.fetchData = this.fetchData.bind(this);
@@ -115,14 +118,19 @@ class Page extends Component {
 
   handleSliderChange(value, type) {
     if (type === 'danceability') {
-      this.setState({ danceability: value }, () => {
-        this.handleChangePlaylistSongs(this.state.allSongs);
-      });
+      this.setState({ danceability: value });
     } else {
-      this.setState({ energy: value }, () => {
-        this.handleChangePlaylistSongs(this.state.allSongs);
-      });
+      this.setState({ energy: value });
     }
+  }
+
+  handleSliderDragStop() {
+    this.setState({ loadingPlaylist: false });
+    this.handleChangePlaylistSongs(this.state.allSongs);
+  }
+
+  handleSliderDragStart() {
+    this.setState({ loadingPlaylist: true });
   }
 
   handleChangePlaylistSongs(allSongs) {
@@ -188,7 +196,10 @@ class Page extends Component {
           energy={energy}
           danceability={danceability}
           playlistSongs={activeSongs}
+          loadingPlaylist={this.state.loadingPlaylist}
           handleSliderChange={this.handleSliderChange}
+          handleSliderDragStop={this.handleSliderDragStop}
+          handleSliderDragStart={this.handleSliderDragStart}
         />
         <Animate
           data={drawerOpen ? d.open : d.closed}
