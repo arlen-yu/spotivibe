@@ -1,6 +1,9 @@
+/* global localStorage */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Animate } from 'react-move';
+import queryString from 'query-string';
 import Snackbar from 'material-ui/Snackbar';
 import ChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
 import Help from 'material-ui/svg-icons/action/help';
@@ -34,6 +37,8 @@ class Page extends Component {
       redirect: false,
       artistError: false,
       loadingPlaylist: false,
+      addedTracks: null,
+      createPlaylistDialog: false,
     };
     this.onSelectArtist = this.onSelectArtist.bind(this);
     this.resetProps = this.resetProps.bind(this);
@@ -49,7 +54,11 @@ class Page extends Component {
 
   componentDidMount() {
     // Initialize billboard data
-    this.fetchData();
+    if (this.props.location.hash.slice(0, 6) === '#/user') {
+      this.createPlaylist();
+    } else {
+      this.fetchData();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -62,6 +71,22 @@ class Page extends Component {
 
   onSelectArtist(artistData) {
     this.setState({ artistData, inputMenuOpen: false, redirect: true });
+  }
+
+  createPlaylist() {
+    const tracks = JSON.parse(localStorage.getItem('playlist'));
+    console.log(tracks);
+    const params = {
+      tracks,
+    };
+    fetch(`/create/playlist?${queryString.stringify(params)}`)
+      .then(res => res.json())
+      .then((res) => {
+        this.setState({ addedTracks: res.addedTracks, createPlaylistDialog: true });
+      })
+      .then(() => {
+        this.fetchData();
+      });
   }
 
   resetProps() {
@@ -142,7 +167,11 @@ class Page extends Component {
       }
       return el;
     });
+    const playlistSongs = activeSongs.map(el => el.id);
+    localStorage.setItem('playlist', JSON.stringify(playlistSongs));
+    console.log(localStorage.getItem('playlist'));
     this.setState({ allSongs, activeSongs });
+    // Give the songs to the 'store'
   }
 
 
@@ -190,6 +219,13 @@ class Page extends Component {
           onRequestClose={() => { this.setState({ dialog: false }); }}
         >
           {dialogText}
+        </Dialog>
+        <Dialog
+          modal={false}
+          open={this.state.createPlaylistDialog}
+          onRequestClose={() => { this.setState({ createPlaylistDialog: false }); }}
+        >
+          {this.state.addedTracks ? 'Playlist added successfully!' : 'Error occured.'}
         </Dialog>
         <Drawer
           menu={drawerOpen}

@@ -20,6 +20,7 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={Page} />
         <Route path="/visualize/:artistName" component={Page} />
+        <Route path="/user/:accessToken/:refreshToken" component={Page} />
       </Switch>
     </MuiThemeProvider>
   </div>

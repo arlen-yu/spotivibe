@@ -2,7 +2,7 @@
 const path = require('path');
 const fs = require('fs');
 const express = require('express');
-
+const cookieParser = require('cookie-parser');
 
 // IMPORTS //
 const indexRoutes = require('./routes/index');
@@ -22,6 +22,8 @@ app.use(express.static(path.join(__dirname, '../client')));
 
 // ROUTES //
 app.use('/', indexRoutes);
+
+app.use(cookieParser());
 
 // ERROR HANDLER //
 app.use((req, res) => {

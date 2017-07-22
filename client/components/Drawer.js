@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Slider from 'material-ui/Slider';
 import Drawer from 'material-ui/Drawer';
 import CircularProgress from 'material-ui/CircularProgress';
+import FlatButton from 'material-ui/FlatButton';
 import { lightGreen } from '../../assets/colors';
 
 class PlaylistFrame extends Component {
@@ -33,7 +34,7 @@ class PlaylistFrame extends Component {
     }).filter(el => el !== '');
 
     return (
-      <div style={{ height: 400, overflowY: 'scroll', overflowX: 'visible', padding: 8, width: 280, margin: 'auto' }}>
+      <div style={{ height: 300, overflowY: 'scroll', overflowX: 'visible', padding: 8, width: 280, margin: 'auto' }}>
         {this.props.loadingPlaylist
           ? <div style={{ textAlign: 'center' }}>
             <div>Loading playlist</div>
@@ -79,6 +80,19 @@ const CustomDrawer = props => (
       />
       : <div style={{ fontSize: 26, padding: 10, width: 280, margin: 'auto' }}>
         No songs! Move the sliders, or add more music!</div>}
+    <div style={{ width: 140, margin: 'auto' }}>
+      <a href="/login">
+        <FlatButton
+          label="save on spotify"
+          style={{
+            borderRadius: '32px',
+            fontWeight: 600,
+            fontSize: 32,
+            backgroundColor: lightGreen,
+          }}
+        />
+      </a>
+    </div>
   </Drawer>
 );
 

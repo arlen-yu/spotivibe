@@ -1,3 +1,5 @@
+/* eslint camelcase: ["off", {properties: "never"}] */
+
 const path = require('path');
 const router = require('express').Router();
 const config = require('../../config.json');
@@ -7,7 +9,16 @@ const SpotifyWebApi = require('spotify-web-api-node');
 const spotifyApi = new SpotifyWebApi({
   clientId: config.clientId,
   clientSecret: config.clientSecret,
+  redirectUri: config.redirect_uri,
 });
+
+const scopes = ['user-read-private', 'user-read-email', 'playlist-modify-private', 'playlist-modify-public'];
+
+const STATE_KEY = 'spotify_auth_state';
+
+let USER_ID;
+
+const generateRandomString = N => (Math.random().toString(36) + Array(N).join('0')).slice(2, N + 2);
 
 function authorize() {
   return spotifyApi.clientCredentialsGrant()
@@ -17,6 +28,57 @@ function authorize() {
 function isInArray(value, array) {
   return array.indexOf(value) > -1;
 }
+
+router.get('/create/playlist', (req, res) => {
+  const trackIds = req.query.tracks.map(el => `spotify:track:${el}`);
+  // const tracks = res.params.tracks;
+  spotifyApi.createPlaylist(USER_ID, 'spotivibe playlist', { public: true })
+    .then((ev) => {
+      const playlistId = ev.body.id;
+      // const trackIds = tracks.map(el => `spotify:track:${el}`);
+      return spotifyApi.addTracksToPlaylist(USER_ID, playlistId, trackIds);
+    })
+    .then(() => {
+      res.json({ addedTracks: true });
+    }, (err) => {
+      console.log(err);
+      res.json({ addedTracks: false });
+    });
+});
+
+router.get('/login', (_, res) => {
+  const state = generateRandomString(16);
+  res.cookie(STATE_KEY, state);
+  // your application requests authorization
+  res.redirect(`${spotifyApi.createAuthorizeURL(scopes, state)}&show_dialog=true`);
+});
+
+router.get('/callback', (req, res) => {
+  const { code, state } = req.query;
+  // const storedState = req.cookies ? req.cookies[STATE_KEY] : null;
+  // first do state validation
+  if (state === null) {
+    res.redirect('/#/error/state mismatch');
+  // if the state is valid, get the authorization code and pass it on to the client
+  } else {
+    res.clearCookie(STATE_KEY);
+    // Retrieve an access token and a refresh token
+    spotifyApi.authorizationCodeGrant(code).then((data) => {
+      const { access_token, refresh_token } = data.body;
+      // Set the access token on the API object to use it in later calls
+      spotifyApi.setAccessToken(access_token);
+      spotifyApi.setRefreshToken(refresh_token);
+      // use the access token to access the Spotify Web API
+      spotifyApi.getMe().then(({ body }) => {
+        USER_ID = body.id;
+      });
+      // we can also pass the token to the browser to make requests from there
+      res.redirect(`/#/user/${access_token}/${refresh_token}`);
+    }).catch(() => {
+      res.redirect('/#/error/invalid token');
+    });
+  }
+});
 
 // TODO: Let user pick from a list of names
 function getArtistIdByName(name) {
@@ -87,7 +149,7 @@ function getPlaylistTracks(user, playlistId) {
 function getPlaylistData(user, playlistId) {
   return getPlaylistTracks(user, playlistId)
     .then(response => getAudioFeatures(response))
-    .then(features => features)
+    .then(features => features);
 }
 
 function getAlbumData(albumId) {
