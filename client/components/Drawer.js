@@ -1,57 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'material-ui/Slider';
 import Drawer from 'material-ui/Drawer';
-import CircularProgress from 'material-ui/CircularProgress';
 import FlatButton from 'material-ui/FlatButton';
 import { lightGreen } from '../../assets/colors';
-
-class PlaylistFrame extends Component {
-  componentDidMount() {
-    this.resetSongs(this.props);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return (!this.props.loadingPlaylist && nextProps.loadingPlaylist) || !nextProps.loadingPlaylist;
-  }
-
-  render() {
-    const baseUrl = 'https://open.spotify.com/embed?uri=spotify:track:';
-    const songs = this.props.allTracks.map((el) => {
-      if (el) {
-        return (
-          <iframe
-            title="spotify-frame"
-            src={`${baseUrl + el.id}&theme=white`}
-            height="80"
-            width="280"
-            frameBorder="0"
-            allowTransparency="true"
-          />
-        );
-      }
-      return '';
-    }).filter(el => el !== '');
-
-    return (
-      <div style={{ height: 300, overflowY: 'scroll', overflowX: 'visible', padding: 8, width: 280, margin: 'auto' }}>
-        {this.props.loadingPlaylist
-          ? <div style={{ textAlign: 'center' }}>
-            <div>Loading playlist</div>
-            <div style={{ width: 60, margin: 'auto' }}>
-              <CircularProgress color={lightGreen} size={60} />
-            </div>
-          </div>
-          : songs}
-      </div>
-    );
-  }
-}
-
-PlaylistFrame.propTypes = {
-  allTracks: PropTypes.arrayOf(PropTypes.any).isRequired,
-  loadingPlaylist: PropTypes.bool.isRequired,
-};
+import PlaylistFrame from './PlaylistFrame';
 
 const CustomDrawer = props => (
   <Drawer open={props.menu} width={300}>
@@ -77,6 +30,7 @@ const CustomDrawer = props => (
       ? <PlaylistFrame
         allTracks={props.playlistSongs}
         loadingPlaylist={props.loadingPlaylist}
+        onDeleteSongs={props.onDeleteSongs}
       />
       : <div style={{ fontSize: 26, padding: 10, width: 280, margin: 'auto' }}>
         No songs! Move the sliders, or add more music!</div>}
@@ -105,6 +59,7 @@ CustomDrawer.propTypes = {
   handleSliderDragStart: PropTypes.func.isRequired,
   handleSliderDragStop: PropTypes.func.isRequired,
   playlistSongs: PropTypes.arrayOf(PropTypes.any).isRequired,
+  onDeleteSongs: PropTypes.func.isRequired,
 };
 
 export default CustomDrawer;

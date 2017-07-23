@@ -30,7 +30,12 @@ function isInArray(value, array) {
 }
 
 router.get('/create/playlist', (req, res) => {
-  const trackIds = req.query.tracks.map(el => `spotify:track:${el}`);
+  let trackIds;
+  if (Array.isArray(req.query.tracks)) {
+    trackIds = req.query.tracks.map(el => `spotify:track:${el}`);
+  } else {
+    trackIds = [`spotify:track:${req.query.tracks}`];
+  }
   // const tracks = res.params.tracks;
   spotifyApi.createPlaylist(USER_ID, 'spotivibe playlist', { public: true })
     .then((ev) => {
@@ -40,8 +45,8 @@ router.get('/create/playlist', (req, res) => {
     })
     .then(() => {
       res.json({ addedTracks: true });
-    }, (err) => {
-      console.log(err);
+    }, () => {
+      // console.log(err);
       res.json({ addedTracks: false });
     });
 });

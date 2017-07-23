@@ -41,6 +41,7 @@ class Page extends Component {
       createPlaylistDialog: false,
     };
     this.onSelectArtist = this.onSelectArtist.bind(this);
+    this.onDeleteSongs = this.onDeleteSongs.bind(this);
     this.resetProps = this.resetProps.bind(this);
     this.fetchArtistSearch = this.fetchArtistSearch.bind(this);
     this.handleSliderChange = this.handleSliderChange.bind(this);
@@ -73,9 +74,17 @@ class Page extends Component {
     this.setState({ artistData, inputMenuOpen: false, redirect: true });
   }
 
+  onDeleteSongs(songId) {
+    const allSongs = this.state.allSongs.filter(el => el.id !== songId);
+    const activeSongs = this.state.activeSongs.filter(el => el.id !== songId);
+    const playlistSongs = activeSongs.map(el => el.id);
+    localStorage.setItem('playlist', JSON.stringify(playlistSongs));
+    this.setState({ allSongs, activeSongs });
+  }
+
   createPlaylist() {
     const tracks = JSON.parse(localStorage.getItem('playlist'));
-    console.log(tracks);
+    // console.log(tracks);
     const params = {
       tracks,
     };
@@ -169,7 +178,7 @@ class Page extends Component {
     });
     const playlistSongs = activeSongs.map(el => el.id);
     localStorage.setItem('playlist', JSON.stringify(playlistSongs));
-    console.log(localStorage.getItem('playlist'));
+    // console.log(localStorage.getItem('playlist'));
     this.setState({ allSongs, activeSongs });
     // Give the songs to the 'store'
   }
@@ -233,6 +242,7 @@ class Page extends Component {
           danceability={danceability}
           playlistSongs={activeSongs}
           loadingPlaylist={this.state.loadingPlaylist}
+          onDeleteSongs={this.onDeleteSongs}
           handleSliderChange={this.handleSliderChange}
           handleSliderDragStop={this.handleSliderDragStop}
           handleSliderDragStart={this.handleSliderDragStart}
