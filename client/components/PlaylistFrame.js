@@ -6,10 +6,6 @@ import Cancel from 'material-ui/svg-icons/navigation/cancel';
 import { lightGreen } from '../../assets/colors';
 
 class PlaylistFrame extends Component {
-  componentDidMount() {
-    this.resetSongs(this.props);
-  }
-
   shouldComponentUpdate(nextProps) {
     return (!this.props.loadingPlaylist && nextProps.loadingPlaylist) || !nextProps.loadingPlaylist;
   }
@@ -26,7 +22,7 @@ class PlaylistFrame extends Component {
     const songs = this.props.allTracks.map((el) => {
       if (el) {
         return (
-          <div style={{ height: 85, width: 285 }}>
+          <div style={{ height: 85, width: 285, marginTop: 4 }} key={el.id}>
             <iframe
               title="spotify-frame"
               src={`${baseUrl + el.id}&theme=white`}
@@ -49,7 +45,7 @@ class PlaylistFrame extends Component {
     }).filter(el => el !== '');
 
     return (
-      <div style={{ height: 300, overflowY: 'scroll', overflowX: 'visible', padding: 8, width: 280, margin: 'auto' }}>
+      <div style={{ height: 'calc(100% - 300px)', overflowY: 'scroll', overflowX: 'hidden', width: 295, margin: 'auto' }}>
         {this.props.loadingPlaylist
           ? <div style={{ textAlign: 'center' }}>
             <div>Loading playlist</div>

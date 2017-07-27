@@ -29,6 +29,7 @@ class Page extends Component {
       featureData: [],
       inputMenuOpen: false,
       drawerOpen: false,
+      dialog: false,
       energy: 0.5,
       danceability: 0.5,
       allSongs: [],
@@ -71,7 +72,7 @@ class Page extends Component {
   }
 
   onSelectArtist(artistData) {
-    this.setState({ artistData, inputMenuOpen: false, redirect: true });
+    this.setState({ artistData, inputMenuOpen: false, redirect: true, drawerOpen: true });
   }
 
   onDeleteSongs(songId) {
