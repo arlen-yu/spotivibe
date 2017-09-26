@@ -1,9 +1,11 @@
+## Spotivibe
+Learn more @ http://arlenyu.com/spotivibe/
+
 ## TODO:
-- Let them log in to save (!)
-  - Spotify changed their api **again**... thnx.
+- Let them log in to save ✓
 - Add dynamic suggestions as user is typing ✓
 - Autogenerate playlists ✓
-- Add favicon
+- Add favicon ✓
 - Add linear progress
 - Implement top 100 view ✓
 - Workaround for spotify api rate limiting (cache?)
